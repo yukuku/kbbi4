@@ -1,8 +1,6 @@
 package yuku.kbbi4.dictdata
 
 import android.util.TimingLogger
-import com.carrotsearch.hppc.IntArrayList
-import com.carrotsearch.hppc.ObjectIntHashMap
 import yuku.kbbi4.App
 import yuku.kbbi4.dastruk.ValueReader
 import java.io.BufferedInputStream
@@ -12,34 +10,36 @@ object Acu {
     const val TAG = "Acu"
 
     val acus = ArrayList<String>(100000)
-    val index_nilai = ObjectIntHashMap<String>()
 
     /**
      * Each element is:
      * 8 bit file_no
      * 24 bit offset
      */
-    val offlens = IntArrayList(100000)
+    val offlens = IntArray(100000)
 
     init {
-        val tl = TimingLogger(TAG, "mulai")
+        val tl = TimingLogger(TAG, "load acus")
+
+        acus.clear()
 
         run {
-            val vr = ValueReader(BufferedInputStream(App.context.assets.open("dictdata/acu_nilai.txt")))
+            val vr = ValueReader(BufferedInputStream(App.context.assets.open("dictdata/acu_nilai.txt"), 200000))
 
             while (true) {
                 val length = vr.readUint8()
                 if (length == 0) break
                 val nilai = vr.readRawString(length)
                 acus.add(nilai)
-                index_nilai.put(nilai, acus.size - 1)
             }
 
             tl.addSplit("${acus.size} acus loaded")
         }
 
+        var index = 0
+
         run {
-            val vr = ValueReader(BufferedInputStream(App.context.assets.open("dictdata/acu_offlens.txt")))
+            val vr = ValueReader(BufferedInputStream(App.context.assets.open("dictdata/acu_offlens.txt"), 200000))
             var file_no = -1
             var offset = 0
 
@@ -55,7 +55,7 @@ object Acu {
                     break
                 }
 
-                offlens.add(file_no shl 24 or offset)
+                offlens[index++] = file_no shl 24 or offset
                 offset += length
             }
 
@@ -68,7 +68,8 @@ object Acu {
     fun noop() {}
 
     fun getId(acu: String): Int {
-        return index_nilai[acu] + 1
+        val pos = Collections.binarySearch(acus, acu)
+        return if (pos < 0) 0 else pos + 1
     }
 
     fun getAcu(id: Int): String {
@@ -86,7 +87,7 @@ object Acu {
     }
 
     fun getRenderer(acu: String): Renderer {
-        val offlen = offlens[index_nilai[acu]]
+        val offlen = offlens[getId(acu) - 1]
         return Renderer(offlen shr 24, offlen and 0xffffff)
     }
 }
