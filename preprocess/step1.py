@@ -209,6 +209,9 @@ class Descml:
         else:
             self.esc_text(0, t)
 
+    def eof(self):
+        self.esc_null(0xff)
+
     def esc_text(self, code: int, t: str):
         if self.text_mode:
             self.buf += bytes('[{}:{}]'.format(code, t), 'utf8')
@@ -349,6 +352,7 @@ def render_acu(acu):
 
         d.text('\n')
 
+    d.eof()
     return d.buf
 
 
@@ -407,6 +411,11 @@ def main():
             varint_to_bytearray(b, offlen[2])
 
             fo.write(b)
+
+        # EOF marker
+        b = bytearray()
+        varint_to_bytearray(b, 0x0)
+        fo.write(b)
 
 
 main()

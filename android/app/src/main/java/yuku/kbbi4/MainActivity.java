@@ -1,12 +1,14 @@
 package yuku.kbbi4;
 
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import yuku.kbbi4.dictdata.Acu;
+import yuku.kbbi4.dictdata.Renderer;
 import yuku.kbbi4.util.Debouncer;
 import yuku.kbbi4.widget.DefaultTextWatcher;
 
@@ -74,8 +76,20 @@ public class MainActivity extends BaseActivity {
 		@Override
 		public void onBindViewHolder(final RecyclerView.ViewHolder _holder_, final int position) {
 			final ViewHolder holder = (ViewHolder) _holder_;
-			final String acu = acus.get(position);
-			holder.text1.setText(acu);
+			{
+				final String acu = acus.get(position);
+				holder.text1.setText(acu);
+			}
+
+			holder.itemView.setOnClickListener(v -> {
+				final String acu = acus.get(holder.getAdapterPosition());
+				final Renderer renderer = Acu.INSTANCE.getRenderer(acu);
+
+				new AlertDialog.Builder(MainActivity.this)
+					.setMessage(renderer.render())
+					.setPositiveButton("OK", null)
+					.show();
+			});
 		}
 
 		@Override

@@ -20,7 +20,7 @@ public class ValueReader {
 		return input.read();
 	}
 
-	public int readInt() throws IOException {
+	public int readVarint() throws IOException {
 		final int a = input.read();
 		if (a < 0xf0) {
 			return a;
@@ -51,7 +51,7 @@ public class ValueReader {
 
 	@NonNull
 	public String readString() throws IOException {
-		final int length = readInt();
+		final int length = readVarint();
 		return readRawString(length);
 	}
 
@@ -70,6 +70,14 @@ public class ValueReader {
 		return new String(buf, 0, length, utf8);
 	}
 
+	public void skip(final int length) throws IOException {
+		int skipped = 0;
+		while (true) {
+			skipped += input.skip(length - skipped);
+			if (skipped == length) return;
+		}
+	}
+
 	static final int ARG_null = 1;
 	static final int ARG_int = 2;
 	static final int ARG_text = 3;
@@ -77,6 +85,7 @@ public class ValueReader {
 	static final int[] codeArg = new int[256];
 
 	static { // must keep updated with preprocessor
+		codeArg[0] = ARG_text; // normal text
 		codeArg[1] = ARG_text;
 		codeArg[2] = ARG_text;
 		codeArg[4] = ARG_text;
@@ -97,6 +106,7 @@ public class ValueReader {
 		codeArg[40] = ARG_int;
 		codeArg[41] = ARG_int;
 		codeArg[50] = ARG_text;
+		codeArg[0xff] = ARG_null; // EOF marker
 	}
 
 	public Cav readClv(@Nullable Cav reuse) throws IOException {
@@ -110,7 +120,7 @@ public class ValueReader {
 			res.number = 0;
 		} else if (arg == ARG_int) {
 			res.string = null;
-			res.number = readInt();
+			res.number = readVarint();
 		} else if (arg == ARG_text) {
 			res.string = readString();
 			res.number = 0;
