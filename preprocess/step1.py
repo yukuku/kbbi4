@@ -1,4 +1,5 @@
 import logging
+import os
 import re
 import sqlite3
 
@@ -187,7 +188,7 @@ def varint_to_bytearray(buf: bytearray, val: int):
     elif val > 0xef:  # 0xf0 to 0xff (2 bytes)
         buf.append(0xfe)
         buf.append(val)
-    else:  # 0x00 to 0xf0 (1 byte)
+    else:  # 0x00 to 0xef (1 byte)
         buf.append(val)
 
 
@@ -231,6 +232,7 @@ class Descml:
             self.varint(val)
 
 
+# must keep updated with client
 CODE_ENTRI = 1  # text
 CODE_SILABEL = 2  # text
 CODE_ENTRI_VAR = 4  # text
@@ -255,7 +257,7 @@ CODE_CONTOH = 50  # text
 
 def render_acu(acu):
     d = Descml()
-    d.text_mode = True
+    d.text_mode = False
     for entri in acu.entries:
         if entri.induk:
             d.esc_uint(CODE_LINK_INDUK, entri.induk.acu.aid)
@@ -351,13 +353,19 @@ def render_acu(acu):
 
 
 def main():
+    base_out_dir = '../android/app/src/main/assets/dictdata'
+
+    for fn in os.listdir(base_out_dir):
+        if fn.startswith('acu_desc_'):
+            os.unlink('{}/{}'.format(base_out_dir, fn))
+
     acu_offlens = []
 
     file_no = 0
     fo = None
     for acu in all_acus:
         if fo is None:
-            fo = open('out/acu_desc_{}.txt'.format(file_no), 'wb')
+            fo = open('{}/acu_desc_{}.txt'.format(base_out_dir, file_no), 'wb')
 
         b = render_acu(acu)
         off = fo.tell()
@@ -376,12 +384,16 @@ def main():
     if fo is not None:
         fo.close()
 
-    with open('out/acu_nilai.txt', 'wb') as fo:
+    with open('{}/acu_nilai.txt'.format(base_out_dir), 'wb') as fo:
         for acu in all_acus:
-            fo.write(bytes([len(acu.nilai)]))
-            fo.write(bytes(acu.nilai, 'utf8'))
+            s = bytes(acu.nilai, 'utf8')
+            fo.write(bytes([len(s)]))
+            fo.write(s)
 
-    with open('out/acu_offlens.txt', 'wb') as fo:
+        # EOF marker
+        fo.write(bytes([0]))
+
+    with open('{}/acu_offlens.txt'.format(base_out_dir), 'wb') as fo:
         last_file_no = -1
 
         for offlen in acu_offlens:

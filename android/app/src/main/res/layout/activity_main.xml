@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:id="@+id/activity_main"
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical"
+	tools:context="yuku.kbbi4.MainActivity">
+
+	<android.support.v7.widget.Toolbar
+		android:layout_width="match_parent"
+		android:layout_height="?actionBarSize"
+		android:background="?colorPrimary"
+		android:theme="@style/Base.ThemeOverlay.AppCompat.Dark.ActionBar">
+
+		<EditText
+			android:id="@+id/tCarian"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginEnd="16dp"
+			android:hint="Cari kata…"
+			android:inputType="text|textNoSuggestions" />
+
+	</android.support.v7.widget.Toolbar>
+
+	<android.support.v7.widget.RecyclerView
+		android:id="@+id/lsAcus"
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1"
+		android:clipToPadding="false"
+		android:padding="16dp" />
+
+</LinearLayout>
