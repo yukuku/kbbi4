@@ -9,66 +9,60 @@ import java.util.*
 object Acu {
     const val TAG = "Acu"
 
-    val acus = ArrayList<String>(100000)
+    private val acus by lazy {
+        val tl = TimingLogger(TAG, "load acus")
+
+        val vr = ValueReader(BufferedInputStream(App.context.assets.open("dictdata/acu_nilai.txt"), 200000))
+
+        val size = vr.readVarint()
+        val res = Array(size, {
+            val length = vr.readUint8()
+            vr.readRawString(length)
+        })
+
+        tl.addSplit("$size acus loaded")
+        tl.dumpToLog()
+
+        res
+    }
 
     /**
      * Each element is:
      * 8 bit file_no
      * 24 bit offset
      */
-    val offlens = IntArray(100000)
+    private val offlens by lazy {
+        val tl = TimingLogger(TAG, "load offlens")
 
-    init {
-        val tl = TimingLogger(TAG, "load acus")
-
-        acus.clear()
-
-        run {
-            val vr = ValueReader(BufferedInputStream(App.context.assets.open("dictdata/acu_nilai.txt"), 200000))
-
-            while (true) {
-                val length = vr.readUint8()
-                if (length == 0) break
-                val nilai = vr.readRawString(length)
-                acus.add(nilai)
+        val vr = ValueReader(BufferedInputStream(App.context.assets.open("dictdata/acu_offlens.txt"), 200000))
+        val size = vr.readVarint()
+        var file_no = -1
+        var offset = 0
+        val res = IntArray(size)
+        for (i in 0..size - 1) {
+            val length = vr.readVarint()
+            if (length == 0xffff) {
+                file_no++
+                offset = 0
+                continue
             }
 
-            tl.addSplit("${acus.size} acus loaded")
-        }
-
-        var index = 0
-
-        run {
-            val vr = ValueReader(BufferedInputStream(App.context.assets.open("dictdata/acu_offlens.txt"), 200000))
-            var file_no = -1
-            var offset = 0
-
-            while (true) {
-                val length = vr.readVarint()
-                if (length == 0xffff) {
-                    file_no++
-                    offset = 0
-                    continue
-                }
-
-                if (length == 0x0) {
-                    break
-                }
-
-                offlens[index++] = file_no shl 24 or offset
-                offset += length
+            if (length == 0x0) {
+                break
             }
 
-            tl.addSplit("${acus.size} offlens loaded")
+            res[i] = file_no shl 24 or offset
+            offset += length
         }
 
+        tl.addSplit("$size offlens loaded")
         tl.dumpToLog()
+
+        res
     }
 
-    fun noop() {}
-
     fun getId(acu: String): Int {
-        val pos = Collections.binarySearch(acus, acu)
+        val pos = Arrays.binarySearch(acus, acu)
         return if (pos < 0) 0 else pos + 1
     }
 
@@ -77,13 +71,13 @@ object Acu {
     }
 
     fun listAcus(prefix: String): List<String> {
-        var from = Collections.binarySearch(acus, "$prefix\u0000").inv() - 1
-        var to = Collections.binarySearch(acus, "$prefix\uffff").inv()
+        var from = Arrays.binarySearch(acus, "$prefix\u0000").inv() - 1
+        var to = Arrays.binarySearch(acus, "$prefix\uffff").inv()
 
         if (from < 0) from = 0
         if (to > acus.size) to = acus.size
 
-        return acus.subList(from, to)
+        return acus.slice(from..to - 1)
     }
 
     fun getRenderer(acu: String): Renderer {

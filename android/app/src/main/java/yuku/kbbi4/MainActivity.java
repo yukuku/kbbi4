@@ -35,8 +35,6 @@ public class MainActivity extends BaseActivity {
 
 		tCarian = find(R.id.tCarian);
 		tCarian.addTextChangedListener(new DefaultTextWatcher(s -> debouncer.submit(s.toString().trim())));
-
-		Acu.INSTANCE.noop();
 	}
 
 	final Debouncer<String, List<String>> debouncer = new Debouncer<String, List<String>>(200) {

@@ -389,15 +389,22 @@ def main():
         fo.close()
 
     with open('{}/acu_nilai.txt'.format(base_out_dir), 'wb') as fo:
+        # length first
+        b = bytearray()
+        varint_to_bytearray(b, len(all_acus))
+        fo.write(b)
+
         for acu in all_acus:
             s = bytes(acu.nilai, 'utf8')
             fo.write(bytes([len(s)]))
             fo.write(s)
 
-        # EOF marker
-        fo.write(bytes([0]))
-
     with open('{}/acu_offlens.txt'.format(base_out_dir), 'wb') as fo:
+        # length first
+        b = bytearray()
+        varint_to_bytearray(b, len(acu_offlens))
+        fo.write(b)
+
         last_file_no = -1
 
         for offlen in acu_offlens:
@@ -411,12 +418,6 @@ def main():
             varint_to_bytearray(b, offlen[2])
 
             fo.write(b)
-
-        # EOF marker
-        b = bytearray()
-        varint_to_bytearray(b, 0x0)
-        fo.write(b)
-
 
 main()
 
