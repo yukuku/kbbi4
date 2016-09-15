@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import yuku.kbbi4.dictdata.Acu;
 import yuku.kbbi4.dictdata.Renderer;
+import yuku.kbbi4.util.Background;
 import yuku.kbbi4.util.Debouncer;
 import yuku.kbbi4.widget.DefaultTextWatcher;
 
@@ -35,6 +36,8 @@ public class MainActivity extends BaseActivity {
 
 		tCarian = find(R.id.tCarian);
 		tCarian.addTextChangedListener(new DefaultTextWatcher(s -> debouncer.submit(s.toString().trim())));
+
+		Background.run(() -> Acu.INSTANCE.warmup());
 	}
 
 	final Debouncer<String, List<String>> debouncer = new Debouncer<String, List<String>>(200) {

@@ -1,5 +1,6 @@
 package yuku.kbbi4.dictdata
 
+import android.util.Log
 import android.util.TimingLogger
 import yuku.kbbi4.App
 import yuku.kbbi4.dastruk.ValueReader
@@ -15,10 +16,10 @@ object Acu {
         val vr = ValueReader(BufferedInputStream(App.context.assets.open("dictdata/acu_nilai.txt"), 200000))
 
         val size = vr.readVarint()
-        val res = Array(size, {
+        val res = Array(size) {
             val length = vr.readUint8()
             vr.readRawString(length)
-        })
+        }
 
         tl.addSplit("$size acus loaded")
         tl.dumpToLog()
@@ -38,27 +39,31 @@ object Acu {
         val size = vr.readVarint()
         var file_no = -1
         var offset = 0
-        val res = IntArray(size)
-        for (i in 0..size - 1) {
-            val length = vr.readVarint()
+        val res = IntArray(size) {
+            var length = vr.readVarint()
             if (length == 0xffff) {
                 file_no++
                 offset = 0
-                continue
+
+                length = vr.readVarint()
             }
 
-            if (length == 0x0) {
-                break
-            }
-
-            res[i] = file_no shl 24 or offset
+            val res = file_no shl 24 or offset
             offset += length
+            res
         }
 
         tl.addSplit("$size offlens loaded")
         tl.dumpToLog()
 
         res
+    }
+
+    /**
+     * Call this from background thread to initialize data safely
+     */
+    fun warmup() {
+        Log.d(TAG, "${acus.size} acus and ${offlens.size} offlens")
     }
 
     fun getId(acu: String): Int {
