@@ -264,7 +264,10 @@ CODE_CONTOH = 50  # text
 def render_acu(acu):
     d = Descml()
     d.text_mode = False
-    for entri in acu.entries:
+    for entri_idx, entri in enumerate(acu.entries):
+        if entri_idx > 0:
+            d.text('\n\n')
+
         if entri.induk:
             d.esc_uint(CODE_LINK_INDUK, entri.induk.acu.aid)
 
@@ -288,6 +291,8 @@ def render_acu(acu):
             d.text(' ')
             d.esc_uint(CODE_LINK_ACU, entri.entri_rujuk.acu.aid)
             d.text('\n')
+
+        d.text('\n')
 
         makna_no = 0
         for makna in entri.maknas:
@@ -367,8 +372,6 @@ def render_acu(acu):
                 d.text('; ')
             d.esc_uint(CODE_LINK_ACU, anak.acu.aid)
             fst = False
-
-        d.text('\n')
 
     d.eof()
     return d.buf

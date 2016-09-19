@@ -4,8 +4,8 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
-import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
+import android.text.style.UnderlineSpan
 import yuku.kbbi4.App
 import yuku.kbbi4.dastruk.Cav
 import yuku.kbbi4.dastruk.ValueReader
@@ -37,7 +37,7 @@ class Renderer(val file_no: Int, val offset: Int) {
                     res.setSpan(StyleSpan(Typeface.BOLD), len, res.length, 0)
                 }
                 10, 11, 12, 13, 14 -> run {
-                    res.append("\n")
+                    res.append("\n\n")
 
                     val len = res.length
 
@@ -50,8 +50,8 @@ class Renderer(val file_no: Int, val offset: Int) {
                         15 -> res.append("Idiom")
                     }
 
+                    res.setSpan(UnderlineSpan(), len, res.length, 0)
                     res.append(": ")
-                    res.setSpan(RelativeSizeSpan(1.2f), len, res.length, 0)
                 }
                 20, 21, 22, 23, 24 -> run {
                     val len = res.length
