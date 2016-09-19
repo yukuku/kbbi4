@@ -437,7 +437,41 @@ def main():
 
             fo.write(b)
 
-main()
+
+def cari_peribahasa():
+    peri = sorted([e for e in all_entries if e.jenis == 'peribahasa'], key=lambda e: e.nilai)
+    for p in peri: print(p)
+
+    def lev(s, t):
+        ns = len(s) + 1
+        nt = len(t) + 1
+        m = [[0] * nt for _ in range(ns)]
+        for i in range(ns): m[i][0] = i
+        for j in range(nt): m[0][j] = j
+        for i in range(1, ns):
+            for j in range(1, nt):
+                if s[i - 1] == t[j - 1]:
+                    m[i][j] = m[i - 1][j - 1]
+                else:
+                    m[i][j] = min([m[i - 1][j], m[i][j - 1], m[i - 1][j - 1]]) + 1
+        return m[ns - 1][nt - 1]
+
+    def cln(s):
+        return ''.join(c for c in list(s) if 'A' <= c <= 'Z' or 'a' <= c <= 'z')
+
+    for i, p1 in enumerate(peri):
+        for p2 in peri[i + 1:]:
+            c1 = cln(p1.nilai)
+            c2 = cln(p2.nilai)
+            d = lev(c1, c2)
+            f = float(d) / min(len(c1), len(c2))
+            if f < 0.3:
+                print("{} {:.2} {} {}".format(d, f, p1, p2))
+
+
+# main()
+
+cari_peribahasa()
 
 # bedakan anaks berdasarkan 'jenis' OK
 
