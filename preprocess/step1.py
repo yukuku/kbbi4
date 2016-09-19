@@ -355,8 +355,6 @@ def render_acu(acu):
                     d.esc_text(CODE_CONTOH, contoh.nilai)
                     fst = False
 
-            d.text('\n')
-
         code = 0
         fst = True
         for anak in sorted(entri.anaks, key=lambda anak: anak.jenis):
@@ -369,6 +367,8 @@ def render_acu(acu):
                 d.text('; ')
             d.esc_uint(CODE_LINK_ACU, anak.acu.aid)
             fst = False
+
+        d.text('\n')
 
     d.eof()
     return d.buf
@@ -469,9 +469,8 @@ def cari_peribahasa():
                 print("{} {:.2} {} {}".format(d, f, p1, p2))
 
 
-# main()
-
-cari_peribahasa()
+main()
+# cari_peribahasa()
 
 # bedakan anaks berdasarkan 'jenis' OK
 
