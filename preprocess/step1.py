@@ -17,6 +17,7 @@ class Entri:
         self.acu = None
         self.jenis = None
         self.entri_var = None
+        self.lafal = None
 
     def __repr__(self):
         return u"Entri<{} '{}' {}>".format(self.eid, self.nilai, self.maknas)
@@ -82,7 +83,7 @@ for row in conn.execute('select distinct mid from Contoh where aktif=1').fetchal
 
 print('mids_with_contoh count:', len(mids_with_contoh))
 
-for row in conn.execute('select eid, entri, jenis_rujuk, entri_rujuk, induk, silabel, jenis, entri_var from Entri where aktif=1').fetchall():
+for row in conn.execute('select eid, entri, jenis_rujuk, entri_rujuk, induk, silabel, jenis, entri_var, lafal from Entri where aktif=1').fetchall():
     e = Entri()
     e.eid = row[0]
     e.nilai = row[1]
@@ -119,6 +120,7 @@ for row in conn.execute('select eid, entri, jenis_rujuk, entri_rujuk, induk, sil
     e.silabel = row[5]
     e.jenis = row[6]
     e.entri_var = row[7]
+    e.lafal = row[8]
 
     all_entries.append(e)
 
@@ -237,7 +239,8 @@ class Descml:
 
 # must keep updated with client
 CODE_ENTRI = 1  # text
-CODE_SILABEL = 2  # text
+CODE_LAFAL = 2  # text
+CODE_SILABEL = 3  # text
 CODE_ENTRI_VAR = 4  # text
 CODE_ANAK_varian = 10  # null
 CODE_ANAK_dasar = 11  # null
@@ -265,19 +268,20 @@ def render_acu(acu):
         if entri.induk:
             d.esc_uint(CODE_LINK_INDUK, entri.induk.acu.aid)
 
-        d.esc_text(CODE_ENTRI, entri.nilai)
+        if entri.silabel:
+            d.esc_text(CODE_SILABEL, entri.silabel)
+        else:
+            d.esc_text(CODE_ENTRI, entri.nilai)
+
+        if entri.lafal:
+            d.text(' ')
+            d.esc_text(CODE_LAFAL, entri.lafal)
 
         if entri.entri_var:
             d.text(' ')
             d.esc_text(CODE_ENTRI_VAR, entri.entri_var)
 
-        if entri.silabel:
-            d.text(' ')
-            d.esc_text(CODE_SILABEL, entri.silabel)
-
         d.text('\n')
-
-        makna_no = 0
 
         if entri.jenis_rujuk and entri.entri_rujuk:
             d.text(entri.jenis_rujuk)
@@ -285,37 +289,53 @@ def render_acu(acu):
             d.esc_uint(CODE_LINK_ACU, entri.entri_rujuk.acu.aid)
             d.text('\n')
 
+        makna_no = 0
         for makna in entri.maknas:
             makna_no += 1
-            d.text('{}.'.format(makna_no))
+            still_empty = True
+
+            if makna_no > 1:
+                d.text('\n\n')
+
+            if len(entri.maknas) != 1:
+                d.text('{}.'.format(makna_no))
+                still_empty = False
 
             # sebelum makna utama
             if makna.kelas:
-                d.text(' ')
+                if not still_empty: d.text(' ')
+                still_empty = False
                 d.esc_text(CODE_KELAS, makna.kelas)
 
             if makna.bahasa:
-                d.text(' ')
+                if not still_empty: d.text(' ')
+                still_empty = False
                 d.esc_text(CODE_BAHASA, makna.bahasa)
 
             if makna.bidang:
-                d.text(' ')
+                if not still_empty: d.text(' ')
+                still_empty = False
                 d.esc_text(CODE_BIDANG, makna.bidang)
 
             if makna.is_ki:
-                d.text(' ')
+                if not still_empty: d.text(' ')
+                still_empty = False
                 d.esc_null(CODE_ki)
 
             if makna.is_kp:
-                d.text(' ')
+                if not still_empty: d.text(' ')
+                still_empty = False
                 d.esc_null(CODE_kp)
 
             if makna.is_akr:
-                d.text(' ')
+                if not still_empty: d.text(' ')
+                still_empty = False
                 d.esc_null(CODE_akr)
 
             # makna utama
-            d.text(' {}'.format(makna.nilai))
+            if not still_empty: d.text(' ')
+
+            d.text(makna.nilai)
 
             # sesudah makna utama
             if makna.ilmiah:
@@ -330,9 +350,9 @@ def render_acu(acu):
                 d.text(': ')
                 fst = True
                 for contoh in makna.contohs:
-                    d.esc_text(CODE_CONTOH, contoh.nilai)
                     if not fst:
                         d.text('; ')
+                    d.esc_text(CODE_CONTOH, contoh.nilai)
                     fst = False
 
             d.text('\n')
@@ -349,8 +369,6 @@ def render_acu(acu):
                 d.text('; ')
             d.esc_uint(CODE_LINK_ACU, anak.acu.aid)
             fst = False
-
-        d.text('\n')
 
     d.eof()
     return d.buf

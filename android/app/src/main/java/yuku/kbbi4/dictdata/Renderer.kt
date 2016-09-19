@@ -25,13 +25,17 @@ class Renderer(val file_no: Int, val offset: Int) {
 
             when (cav.code) {
                 0 -> res.append(cav.string)
-                1 -> run {
+                1, 3 -> run {
                     val len = res.length
                     res.append(cav.string)
                     res.setSpan(StyleSpan(Typeface.BOLD), len, res.length, 0)
                 }
                 2 -> res.append("/${cav.string}/")
-                4 -> res.append("(${cav.string})")
+                4 -> run {
+                    val len = res.length
+                    res.append("(${cav.string})")
+                    res.setSpan(StyleSpan(Typeface.BOLD), len, res.length, 0)
+                }
                 10, 11, 12, 13, 14 -> run {
                     res.append("\n")
 

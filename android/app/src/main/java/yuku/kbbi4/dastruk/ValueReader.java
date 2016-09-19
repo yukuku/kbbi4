@@ -88,6 +88,7 @@ public class ValueReader {
 		codeArg[0] = ARG_text; // normal text
 		codeArg[1] = ARG_text;
 		codeArg[2] = ARG_text;
+		codeArg[3] = ARG_text;
 		codeArg[4] = ARG_text;
 		codeArg[10] = ARG_null;
 		codeArg[11] = ARG_null;
