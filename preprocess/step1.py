@@ -90,7 +90,7 @@ def canonize(s: str):
     return s
 
 
-conn = sqlite3.connect('in/kbbi4v4_2.db')
+conn = sqlite3.connect('in/kbbi4v6.db')
 mids_with_contoh = set()
 for row in conn.execute('select distinct mid from Contoh where aktif=1').fetchall():
     mids_with_contoh.add(row[0])
