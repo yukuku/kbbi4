@@ -85,8 +85,8 @@ object Acu {
         return acus.slice(from..to - 1)
     }
 
-    fun getRenderer(id: Int): Renderer {
+    fun getRenderer(id: Int, acu_click: (Int) -> Unit): Renderer {
         val offlen = offlens[id - 1]
-        return Renderer(offlen shr 24, offlen and 0xffffff)
+        return Renderer(offlen shr 24, offlen and 0xffffff, acu_click)
     }
 }

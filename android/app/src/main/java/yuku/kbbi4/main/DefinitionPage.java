@@ -2,12 +2,14 @@ package yuku.kbbi4.main;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.f2prateek.dart.Dart;
 import com.f2prateek.dart.InjectExtra;
+import kotlin.Unit;
 import yuku.kbbi4.R;
 import yuku.kbbi4.dictdata.Acu;
 import yuku.kbbi4.dictdata.Renderer;
@@ -38,7 +40,12 @@ public class DefinitionPage extends ContentPage {
 	public void onViewCreated(final View view, @Nullable final Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 
-		final Renderer renderer = Acu.INSTANCE.getRenderer(acu_id);
+		final Renderer renderer = Acu.INSTANCE.getRenderer(acu_id, link_acu_id -> {
+			MainActivity.requestDefinitionPage(link_acu_id);
+			return Unit.INSTANCE;
+		});
+
 		tDesc.setText(renderer.render());
+		tDesc.setMovementMethod(LinkMovementMethod.getInstance());
 	}
 }

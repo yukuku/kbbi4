@@ -87,7 +87,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
 		descriptors = new ArrayList<>();
 		descriptors.add(new SimplePageDescriptor("dashboard", "Dashboard"));
-		descriptors.add(new SimplePageDescriptor("unknown", "Unknown"));
 
 		vp = find(R.id.vp);
 		vp.setAdapter(pagerAdapter = new ContentAdapter(getSupportFragmentManager(), descriptors));

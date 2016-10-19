@@ -3,15 +3,18 @@ package yuku.kbbi4.dictdata
 import android.graphics.Color
 import android.graphics.Typeface
 import android.text.SpannableStringBuilder
+import android.text.TextPaint
+import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.text.style.UnderlineSpan
+import android.view.View
 import yuku.kbbi4.App
 import yuku.kbbi4.dastruk.Cav
 import yuku.kbbi4.dastruk.ValueReader
 import java.io.BufferedInputStream
 
-class Renderer(val file_no: Int, val offset: Int) {
+class Renderer(val file_no: Int, val offset: Int, val acu_click: (Int) -> Unit) {
     fun render(): SpannableStringBuilder {
         val vr = ValueReader(BufferedInputStream(App.context.assets.open("dictdata/acu_desc_$file_no.txt")))
         vr.skip(offset)
@@ -71,8 +74,18 @@ class Renderer(val file_no: Int, val offset: Int) {
                 }
                 40, 41 -> run {
                     val len = res.length
-                    res.append(Acu.getAcu(cav.number))
+                    val acu_id = cav.number
+                    res.append(Acu.getAcu(acu_id))
                     res.setSpan(ForegroundColorSpan(Color.RED), len, res.length, 0)
+                    res.setSpan(object : ClickableSpan() {
+                        override fun onClick(widget: View) {
+                            acu_click(acu_id)
+                        }
+
+                        override fun updateDrawState(ds: TextPaint) {
+                            // nop
+                        }
+                    }, len, res.length, 0)
 
                     if (cav.code == 41) {
                         res.append(" >> ")
