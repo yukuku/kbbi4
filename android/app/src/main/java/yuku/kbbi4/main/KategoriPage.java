@@ -11,22 +11,28 @@ import android.widget.TextView;
 import com.f2prateek.dart.Dart;
 import com.f2prateek.dart.InjectExtra;
 import yuku.kbbi4.R;
+import yuku.kbbi4.dictdata.Acu;
 import yuku.kbbi4.dictdata.Kategori;
 import yuku.kbbi4.dictdata.KategoriRepo;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static yuku.kbbi4.main.MainActivity.requestDefinitionPage;
 import static yuku.kbbi4.util.Views.Find;
 
-public class JenisPage extends ContentPage {
+public class KategoriPage extends ContentPage {
 	@InjectExtra
 	String jenis;
 
-	TextView tJenis;
-	RecyclerView lsKategoris;
+	@InjectExtra
+	String nilai;
 
-	KategorisAdapter kategorisAdapter;
+	TextView tKategori;
+	RecyclerView lsAcus;
+
+	Kategori kategori;
+	AcusAdapter acusAdapter;
 
 	@Override
 	public void onCreate(@Nullable final Bundle savedInstanceState) {
@@ -37,9 +43,9 @@ public class JenisPage extends ContentPage {
 	@Nullable
 	@Override
 	public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable final Bundle savedInstanceState) {
-		final View res = inflater.inflate(R.layout.page_main_jenis, container, false);
-		tJenis = Find(res, R.id.tJenis);
-		lsKategoris = Find(res, R.id.lsKategoris);
+		final View res = inflater.inflate(R.layout.page_main_kategori, container, false);
+		tKategori = Find(res, R.id.tKategori);
+		lsAcus = Find(res, R.id.lsAcus);
 		return res;
 	}
 
@@ -47,10 +53,17 @@ public class JenisPage extends ContentPage {
 	public void onViewCreated(final View view, @Nullable final Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 
-		tJenis.setText(jenis);
-		lsKategoris.setLayoutManager(new LinearLayoutManager(getActivity()));
-		lsKategoris.setAdapter(kategorisAdapter = new KategorisAdapter());
-		kategorisAdapter.setData(KategoriRepo.INSTANCE.listKategoris(jenis));
+		kategori = KategoriRepo.INSTANCE.getKategori(jenis, nilai);
+
+		tKategori.setText(kategori.desc);
+		lsAcus.setLayoutManager(new LinearLayoutManager(getActivity()));
+		lsAcus.setAdapter(acusAdapter = new AcusAdapter());
+
+		final List<String> acus = new ArrayList<>();
+		for (final int acuId : KategoriRepo.INSTANCE.listAcuIds(jenis, nilai)) {
+			acus.add(Acu.INSTANCE.getAcu(acuId));
+		}
+		acusAdapter.setData(acus);
 	}
 
 	static class ViewHolder extends RecyclerView.ViewHolder {
@@ -62,8 +75,12 @@ public class JenisPage extends ContentPage {
 		}
 	}
 
-	class KategorisAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-		final List<Kategori> kategoris = new ArrayList<>();
+	class AcusAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+		final List<String> acus = new ArrayList<>();
+
+		AcusAdapter() {
+			setHasStableIds(true);
+		}
 
 		@Override
 		public RecyclerView.ViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
@@ -74,26 +91,30 @@ public class JenisPage extends ContentPage {
 		public void onBindViewHolder(final RecyclerView.ViewHolder _holder_, final int position) {
 			final ViewHolder holder = (ViewHolder) _holder_;
 			{
-				final Kategori kategori = kategoris.get(position);
-				holder.text1.setText(kategori.desc);
+				final String acu = acus.get(position);
+				holder.text1.setText(acu);
 			}
 
 			holder.itemView.setOnClickListener(v -> {
-				final Kategori kategori = kategoris.get(holder.getAdapterPosition());
-				MainActivity.requestKategoriPage(jenis, kategori.nilai);
+				final String acu = acus.get(holder.getAdapterPosition());
+				requestDefinitionPage(Acu.INSTANCE.getId(acu));
 			});
 		}
 
 		@Override
 		public int getItemCount() {
-			return kategoris.size();
+			return acus.size();
 		}
 
-		public void setData(final List<Kategori> result) {
-			this.kategoris.clear();
-			this.kategoris.addAll(result);
+		public void setData(final List<String> result) {
+			this.acus.clear();
+			this.acus.addAll(result);
 			notifyDataSetChanged();
 		}
-	}
 
+		@Override
+		public long getItemId(final int position) {
+			return Acu.INSTANCE.getId(acus.get(position));
+		}
+	}
 }

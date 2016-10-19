@@ -32,4 +32,15 @@ object KategoriRepo {
     fun listKategoris(jenis: String): List<Kategori> {
         return repo[jenis].orEmpty()
     }
+
+    fun getKategori(jenis: String, nilai: String): Kategori {
+        return listKategoris(jenis).find { kategori -> kategori.nilai == nilai }!!
+    }
+
+    fun listAcuIds(jenis: String, nilai: String): IntArray {
+        return ValueReader(BufferedInputStream(App.context.assets.open("dictdata/kat_${jenis}_$nilai.txt"), 40000)).use { vr ->
+            val size = vr.readVarint()
+            IntArray(size) { vr.readVarint() }
+        }
+    }
 }

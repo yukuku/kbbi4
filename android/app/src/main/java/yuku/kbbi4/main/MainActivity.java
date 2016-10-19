@@ -110,16 +110,24 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
 			final PageDescriptor pd;
 			switch (kind) {
-				case "definition":
+				case "definition": {
 					final int acu_id = intent.getIntExtra("acu_id", 0);
 					pd = new SimplePageDescriptor("definition:" + acu_id, "Definition");
 					break;
-				case "jenis":
+				}
+				case "jenis": {
 					final String jenis = intent.getStringExtra("jenis");
 					pd = new SimplePageDescriptor("jenis:" + jenis, "Jenis " + jenis);
 					break;
+				}
+				case "kategori": {
+					final String jenis = intent.getStringExtra("jenis");
+					final String nilai = intent.getStringExtra("nilai");
+					pd = new SimplePageDescriptor("kategori:" + jenis + ":" + nilai, "Kategori " + nilai);
+					break;
+				}
 				default:
-					pd = new SimplePageDescriptor("unknown", "unknown");
+					pd = new SimplePageDescriptor("unknown:" + Math.random(), "unknown");
 			}
 
 			// remove anything after current pos
@@ -144,6 +152,14 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 		App.lbm().sendBroadcast(new Intent(ACTION_REQUEST_NEW_PAGE)
 			.putExtra("kind", "jenis")
 			.putExtra("jenis", jenis)
+		);
+	}
+
+	public static void requestKategoriPage(final String jenis, final String nilai) {
+		App.lbm().sendBroadcast(new Intent(ACTION_REQUEST_NEW_PAGE)
+			.putExtra("kind", "kategori")
+			.putExtra("jenis", jenis)
+			.putExtra("nilai", nilai)
 		);
 	}
 
@@ -343,6 +359,20 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 					final JenisPage page = new JenisPage();
 					page.setArguments(intent.getExtras());
 					return page;
+				}
+				case "kategori": {
+					if (addl != null) {
+						final String jenis = addl.substring(0, addl.indexOf(':'));
+						final String nilai = addl.substring(addl.indexOf(':') + 1);
+
+						final Intent intent = Henson.with(MainActivity.this).gotoKategoriPage()
+							.jenis(jenis)
+							.nilai(nilai)
+							.build();
+						final KategoriPage page = new KategoriPage();
+						page.setArguments(intent.getExtras());
+						return page;
+					}
 				}
 			}
 			return new UnknownPage();
