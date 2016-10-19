@@ -94,6 +94,16 @@ class Renderer(val file_no: Int, val offset: Int, val acu_click: (Int) -> Unit) 
                     res.append(cav.string)
                     res.setSpan(ForegroundColorSpan(Color.GRAY), len, res.length, 0)
                 }
+                60, 61, 62, 63 -> run {
+                    val len = res.length
+                    res.append(cav.string)
+                    when (cav.code) {
+                        60 -> res.setSpan(StyleSpan(Typeface.BOLD), len, res.length, 0)
+                        61 -> res.setSpan(StyleSpan(Typeface.ITALIC), len, res.length, 0)
+                        62 -> res.setSpan(SubscriptSpan(), len, res.length, 0)
+                        63 -> res.setSpan(SuperscriptSpan(), len, res.length, 0)
+                    }
+                }
             }
         }
 

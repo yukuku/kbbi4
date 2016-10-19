@@ -296,6 +296,23 @@ CODE_akr = 32  # null
 CODE_LINK_ACU = 40  # int
 CODE_LINK_INDUK = 41  # int
 CODE_CONTOH = 50  # text
+CODE_BOLD = 60  # text
+CODE_ITALIC = 61  # text
+CODE_SUB = 62  # text
+CODE_SUP = 63  # text
+
+
+def kenali_tag(d: Descml, s: str, tags: list, codes: list):
+    pos = 0
+    cat = '|'.join(tags)
+    for m in re.finditer(r'<(' + cat + r')>(.*?)</\1>', s):
+        d.text(s[pos:m.start(0)])
+        tag = m.group(1)
+        code = codes[tags.index(tag)]
+        d.esc_text(code, m.group(2))
+        pos = m.end(0)
+
+    d.text(s[pos:])
 
 
 def render_acu(acu):
@@ -377,7 +394,7 @@ def render_acu(acu):
             # makna utama
             if not still_empty: d.text(' ')
 
-            d.text(makna.nilai)
+            kenali_tag(d, makna.nilai, ['b', 'i', 'sub', 'sup'], [CODE_BOLD, CODE_ITALIC, CODE_SUB, CODE_SUP])
 
             # sesudah makna utama
             if makna.ilmiah:
