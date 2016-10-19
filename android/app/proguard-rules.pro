@@ -15,3 +15,14 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+-dontwarn com.f2prateek.dart.internal.**
+-keep class **$$ExtraInjector { *; }
+-keepclasseswithmembernames class * {
+    @com.f2prateek.dart.* <fields>;
+}
+
+# for dart 2.0 only
+-keep class **Henson { *; }
+-keep class **$$IntentBuilder { *; }
+

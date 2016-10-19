@@ -85,8 +85,8 @@ object Acu {
         return acus.slice(from..to - 1)
     }
 
-    fun getRenderer(acu: String): Renderer {
-        val offlen = offlens[getId(acu) - 1]
+    fun getRenderer(id: Int): Renderer {
+        val offlen = offlens[id - 1]
         return Renderer(offlen shr 24, offlen and 0xffffff)
     }
 }

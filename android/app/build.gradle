@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'kotlin-android'
 apply plugin: 'me.tatarka.retrolambda'
 
@@ -41,5 +42,9 @@ dependencies {
     compile 'com.carrotsearch:hppc:0.7.1'
     compile "com.android.support:design:$supportLibraryVersion"
     compile 'com.commonsware.cwac:pager:0.2.5'
+    compile "com.f2prateek.dart:dart:$dartVersion"
+    provided "com.f2prateek.dart:dart-processor:$dartVersion"
+    compile "com.f2prateek.dart:henson:$dartVersion"
+    apt "com.f2prateek.dart:henson-processor:$dartVersion"
     testCompile 'junit:junit:4.12'
 }
