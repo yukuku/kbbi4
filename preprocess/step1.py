@@ -22,6 +22,9 @@ class Entri:
     def __repr__(self):
         return u"Entri<{} '{}' {}>".format(self.eid, self.nilai, self.maknas)
 
+    def __lt__(self, other):
+        return self.eid < other.eid
+
 
 class Makna:
     def __init__(self):
@@ -58,6 +61,10 @@ class Acu:
 
     def __repr__(self):
         return u"Acu<{} '{}' {}>".format(self.aid, self.nilai, self.entries)
+
+
+    def __lt__(self, other):
+        return self.aid < other.aid
 
 
 index_acu_nilai = {}
@@ -439,6 +446,47 @@ def main():
             varint_to_bytearray(b, offlen[2])
 
             fo.write(b)
+
+    # index per bahasa
+    bahasas = {m.bahasa: [] for e in all_entries for m in e.maknas if m.bahasa}
+    for e in all_entries:
+        for m in e.maknas:
+            if m.bahasa:
+                bahasas[m.bahasa].append(e.acu)
+    for bahasa, acus in bahasas.items():
+        acus = sorted(set(acus))
+        print(u'Section bahasa: {} ({} acus)'.format(bahasa, len(acus)))
+        with open('{}/sec_bahasa_{}.txt'.format(base_out_dir, bahasa), 'wb') as fo:
+            # length first
+            b = bytearray()
+            varint_to_bytearray(b, len(acus))
+            fo.write(b)
+
+            for a in acus:
+                b = bytearray()
+                varint_to_bytearray(b, a.aid)
+                fo.write(b)
+
+
+    # index per bidang
+    bidangs = {m.bidang: [] for e in all_entries for m in e.maknas if m.bidang}
+    for e in all_entries:
+        for m in e.maknas:
+            if m.bidang:
+                bidangs[m.bidang].append(e.acu)
+    for bidang, acus in bidangs.items():
+        acus = sorted(set(acus))
+        print(u'Section bidang: {} ({} entries)'.format(bidang, len(acus)))
+        with open('{}/sec_bidang_{}.txt'.format(base_out_dir, bidang), 'wb') as fo:
+            # length first
+            b = bytearray()
+            varint_to_bytearray(b, len(acus))
+            fo.write(b)
+
+            for a in acus:
+                b = bytearray()
+                varint_to_bytearray(b, a.aid)
+                fo.write(b)
 
 
 def cari_peribahasa():
