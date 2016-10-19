@@ -62,9 +62,15 @@ class Acu:
     def __repr__(self):
         return u"Acu<{} '{}' {}>".format(self.aid, self.nilai, self.entries)
 
-
     def __lt__(self, other):
         return self.aid < other.aid
+
+
+class Kategori:
+    def __init__(self):
+        self.jenis = None
+        self.nilai = None
+        self.desc = None
 
 
 index_acu_nilai = {}
@@ -72,6 +78,7 @@ index_entri_eid = {}
 index_entri_nilai = {}
 all_acus = []
 all_entries = []
+all_kategoris = []
 
 
 def canonize(s: str):
@@ -171,8 +178,17 @@ for e in all_entries:
     if not e.maknas and not e.induk and not e.anaks and not e.jenis_rujuk and not e.entri_rujuk:
         logging.warning("{} has no makna and no induk/anaks and no valid entri_rujuk".format(e))
 
+# read all kategoris
+for row in conn.execute('select jenis, katid, kategori from Kategori where aktif=1').fetchall():
+    k = Kategori()
+    k.jenis = row[0]
+    k.nilai = row[1]
+    k.desc = row[2]
+    all_kategoris.append(k)
+
 print('entry count:', len(all_entries))
 print('acu count:', len(all_acus))
+print('kategori count:', len(all_kategoris))
 
 
 def varint_to_bytearray(buf: bytearray, val: int):
@@ -199,6 +215,20 @@ def varint_to_bytearray(buf: bytearray, val: int):
         buf.append(val)
     else:  # 0x00 to 0xef (1 byte)
         buf.append(val)
+
+
+def write_varint(fo, val: int):
+    b = bytearray()
+    varint_to_bytearray(b, val)
+    fo.write(b)
+
+
+def write_text(fo, t: str):
+    s = bytes(t, 'utf8')
+    b = bytearray()
+    varint_to_bytearray(b, len(s))
+    fo.write(b)
+    fo.write(s)
 
 
 class Descml:
@@ -388,7 +418,7 @@ def main():
     base_out_dir = '../android/app/src/main/assets/dictdata'
 
     for fn in os.listdir(base_out_dir):
-        if fn.startswith('acu_desc_'):
+        if fn.startswith('acu_desc_') or fn.startswith('kat_'):
             os.unlink('{}/{}'.format(base_out_dir, fn))
 
     acu_offlens = []
@@ -447,7 +477,7 @@ def main():
 
             fo.write(b)
 
-    # index per bahasa
+    # kategori list per bahasa
     bahasas = {m.bahasa: [] for e in all_entries for m in e.maknas if m.bahasa}
     for e in all_entries:
         for m in e.maknas:
@@ -455,20 +485,15 @@ def main():
                 bahasas[m.bahasa].append(e.acu)
     for bahasa, acus in bahasas.items():
         acus = sorted(set(acus))
-        print(u'Section bahasa: {} ({} acus)'.format(bahasa, len(acus)))
-        with open('{}/sec_bahasa_{}.txt'.format(base_out_dir, bahasa), 'wb') as fo:
+        print(u'Kategori bahasa: {} ({} acus)'.format(bahasa, len(acus)))
+        with open('{}/kat_bahasa_{}.txt'.format(base_out_dir, bahasa), 'wb') as fo:
             # length first
-            b = bytearray()
-            varint_to_bytearray(b, len(acus))
-            fo.write(b)
+            write_varint(fo, len(acus))
 
             for a in acus:
-                b = bytearray()
-                varint_to_bytearray(b, a.aid)
-                fo.write(b)
+                write_varint(fo, a.aid)
 
-
-    # index per bidang
+    # kategori list per bidang
     bidangs = {m.bidang: [] for e in all_entries for m in e.maknas if m.bidang}
     for e in all_entries:
         for m in e.maknas:
@@ -476,17 +501,25 @@ def main():
                 bidangs[m.bidang].append(e.acu)
     for bidang, acus in bidangs.items():
         acus = sorted(set(acus))
-        print(u'Section bidang: {} ({} entries)'.format(bidang, len(acus)))
-        with open('{}/sec_bidang_{}.txt'.format(base_out_dir, bidang), 'wb') as fo:
+        print(u'Kategori bidang: {} ({} entries)'.format(bidang, len(acus)))
+        with open('{}/kat_bidang_{}.txt'.format(base_out_dir, bidang), 'wb') as fo:
             # length first
-            b = bytearray()
-            varint_to_bytearray(b, len(acus))
-            fo.write(b)
+            write_varint(fo, len(acus))
 
             for a in acus:
-                b = bytearray()
-                varint_to_bytearray(b, a.aid)
-                fo.write(b)
+                write_varint(fo, a.aid)
+
+    # kategori index
+    for jenis in ['bahasa', 'bidang']:
+        with open('{}/kat_index_{}.txt'.format(base_out_dir, jenis), 'wb') as fo:
+            f = list(filter(lambda k: k.jenis == jenis, all_kategoris))
+
+            # length first
+            write_varint(fo, len(f))
+
+            for k in f:
+                write_text(fo, k.nilai)
+                write_text(fo, k.desc)
 
 
 def cari_peribahasa():
