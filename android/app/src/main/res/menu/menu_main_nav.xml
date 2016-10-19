@@ -3,7 +3,7 @@
 
 	<item android:title="Kategori">
 		<menu>
-			<group android:checkableBehavior="single">
+			<group>
 				<item
 					android:id="@+id/menuBahasa"
 					android:icon="@drawable/ic_menu_gallery"

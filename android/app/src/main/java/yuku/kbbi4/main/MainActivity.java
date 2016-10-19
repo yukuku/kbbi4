@@ -114,22 +114,22 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 			switch (kind) {
 				case "definition": {
 					final int acu_id = intent.getIntExtra("acu_id", 0);
-					pd = new SimplePageDescriptor("definition:" + acu_id, "Definition");
+					pd = new SimplePageDescriptor("definition:" + acu_id + ":" + Math.random(), "Definition");
 					break;
 				}
 				case "jenis": {
 					final String jenis = intent.getStringExtra("jenis");
-					pd = new SimplePageDescriptor("jenis:" + jenis, "Jenis " + jenis);
+					pd = new SimplePageDescriptor("jenis:" + jenis + ":" + Math.random(), "Jenis " + jenis);
 					break;
 				}
 				case "kategori": {
 					final String jenis = intent.getStringExtra("jenis");
 					final String nilai = intent.getStringExtra("nilai");
-					pd = new SimplePageDescriptor("kategori:" + jenis + ":" + nilai, "Kategori " + nilai);
+					pd = new SimplePageDescriptor("kategori:" + jenis + ":" + nilai + ":" + Math.random(), "Kategori " + nilai);
 					break;
 				}
 				default:
-					pd = new SimplePageDescriptor("unknown:" + Math.random(), "unknown");
+					pd = new SimplePageDescriptor("unknown" + ":" + Math.random(), "unknown");
 			}
 
 			// remove anything after current pos
@@ -341,23 +341,16 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 		@NonNull
 		protected ContentPage createFragment(final PageDescriptor pd) {
 			final String tag = pd.getFragmentTag();
-			final String kind;
-			final String addl;
-			if (tag.contains(":")) {
-				final int p = tag.indexOf(':');
-				kind = tag.substring(0, p);
-				addl = tag.substring(p + 1);
-			} else {
-				kind = tag;
-				addl = null;
-			}
+			final String[] args = tag.split(":");
+			final String kind = args[0];
+
 			switch (kind) {
 				case "dashboard": {
 					return new DashboardPage();
 				}
 				case "definition": {
 					final Intent intent = Henson.with(MainActivity.this).gotoDefinitionPage()
-						.acu_id(Integer.parseInt(addl))
+						.acu_id(Integer.parseInt(args[1]))
 						.build();
 					final DefinitionPage page = new DefinitionPage();
 					page.setArguments(intent.getExtras());
@@ -365,25 +358,20 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 				}
 				case "jenis": {
 					final Intent intent = Henson.with(MainActivity.this).gotoJenisPage()
-						.jenis(addl)
+						.jenis(args[1])
 						.build();
 					final JenisPage page = new JenisPage();
 					page.setArguments(intent.getExtras());
 					return page;
 				}
 				case "kategori": {
-					if (addl != null) {
-						final String jenis = addl.substring(0, addl.indexOf(':'));
-						final String nilai = addl.substring(addl.indexOf(':') + 1);
-
-						final Intent intent = Henson.with(MainActivity.this).gotoKategoriPage()
-							.jenis(jenis)
-							.nilai(nilai)
-							.build();
-						final KategoriPage page = new KategoriPage();
-						page.setArguments(intent.getExtras());
-						return page;
-					}
+					final Intent intent = Henson.with(MainActivity.this).gotoKategoriPage()
+						.jenis(args[1])
+						.nilai(args[2])
+						.build();
+					final KategoriPage page = new KategoriPage();
+					page.setArguments(intent.getExtras());
+					return page;
 				}
 			}
 			return new UnknownPage();
