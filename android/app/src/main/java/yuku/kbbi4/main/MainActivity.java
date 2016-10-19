@@ -12,6 +12,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -20,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import com.commonsware.cwac.pager.BuildConfig;
 import com.commonsware.cwac.pager.PageDescriptor;
 import com.commonsware.cwac.pager.SimplePageDescriptor;
 import com.commonsware.cwac.pager.v4.ArrayPagerAdapter;
@@ -311,10 +313,19 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 	public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 		final int itemId = item.getItemId();
 
-		if (itemId == R.id.menuBahasa) {
-			requestJenisPage("bahasa");
-		} else if (itemId == R.id.menuBidang) {
-			requestJenisPage("bidang");
+		switch (itemId) {
+			case R.id.menuBahasa:
+				requestJenisPage("bahasa");
+				break;
+			case R.id.menuBidang:
+				requestJenisPage("bidang");
+				break;
+			case R.id.menuAbout:
+				new AlertDialog.Builder(this)
+					.setMessage(getString(R.string.app_name) + " " + BuildConfig.VERSION_NAME + " (" + BuildConfig.VERSION_CODE + ")")
+					.setPositiveButton("OK", null)
+					.show();
+				break;
 		}
 
 		drawer.closeDrawer(GravityCompat.START);
