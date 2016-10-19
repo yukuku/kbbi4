@@ -4,10 +4,7 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.text.SpannableStringBuilder
 import android.text.TextPaint
-import android.text.style.ClickableSpan
-import android.text.style.ForegroundColorSpan
-import android.text.style.StyleSpan
-import android.text.style.UnderlineSpan
+import android.text.style.*
 import android.view.View
 import yuku.kbbi4.App
 import yuku.kbbi4.dastruk.Cav
@@ -32,6 +29,7 @@ class Renderer(val file_no: Int, val offset: Int, val acu_click: (Int) -> Unit) 
                     val len = res.length
                     res.append(cav.string)
                     res.setSpan(StyleSpan(Typeface.BOLD), len, res.length, 0)
+                    res.setSpan(RelativeSizeSpan(1.4f), len, res.length, 0)
                 }
                 2 -> res.append("/${cav.string}/")
                 4 -> run {

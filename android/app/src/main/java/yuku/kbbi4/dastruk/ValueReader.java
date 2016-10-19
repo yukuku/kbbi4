@@ -3,11 +3,12 @@ package yuku.kbbi4.dastruk;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 
-public class ValueReader {
+public class ValueReader implements Closeable {
 	private InputStream input;
 	private byte[] buf = new byte[4096];
 	private static Charset utf8 = Charset.forName("utf-8");
@@ -130,5 +131,10 @@ public class ValueReader {
 		}
 
 		return res;
+	}
+
+	@Override
+	public void close() throws IOException {
+		input.close();
 	}
 }

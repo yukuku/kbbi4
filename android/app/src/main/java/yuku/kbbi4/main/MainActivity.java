@@ -114,8 +114,18 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 					final int acu_id = intent.getIntExtra("acu_id", 0);
 					pd = new SimplePageDescriptor("definition:" + acu_id, "Definition");
 					break;
+				case "jenis":
+					final String jenis = intent.getStringExtra("jenis");
+					pd = new SimplePageDescriptor("jenis:" + jenis, "Jenis " + jenis);
+					break;
 				default:
 					pd = new SimplePageDescriptor("unknown", "unknown");
+			}
+
+			// remove anything after current pos
+			final int pos = vp.getCurrentItem();
+			for (int i = pagerAdapter.getCount() - 1; i > pos; i--) {
+				pagerAdapter.remove(i);
 			}
 
 			pagerAdapter.add(pd);
@@ -127,6 +137,13 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 		App.lbm().sendBroadcast(new Intent(ACTION_REQUEST_NEW_PAGE)
 			.putExtra("kind", "definition")
 			.putExtra("acu_id", acu_id)
+		);
+	}
+
+	public static void requestJenisPage(final String jenis) {
+		App.lbm().sendBroadcast(new Intent(ACTION_REQUEST_NEW_PAGE)
+			.putExtra("kind", "jenis")
+			.putExtra("jenis", jenis)
 		);
 	}
 
@@ -276,8 +293,13 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
 	@Override
 	public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-		// Handle navigation view item clicks here.
-		int id = item.getItemId();
+		final int itemId = item.getItemId();
+
+		if (itemId == R.id.menuBahasa) {
+			requestJenisPage("bahasa");
+		} else if (itemId == R.id.menuBidang) {
+			requestJenisPage("bidang");
+		}
 
 		drawer.closeDrawer(GravityCompat.START);
 		return true;
@@ -303,15 +325,25 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 				addl = null;
 			}
 			switch (kind) {
-				case "dashboard":
+				case "dashboard": {
 					return new DashboardPage();
-				case "definition":
+				}
+				case "definition": {
 					final Intent intent = Henson.with(MainActivity.this).gotoDefinitionPage()
 						.acu_id(Integer.parseInt(addl))
 						.build();
 					final DefinitionPage page = new DefinitionPage();
 					page.setArguments(intent.getExtras());
 					return page;
+				}
+				case "jenis": {
+					final Intent intent = Henson.with(MainActivity.this).gotoJenisPage()
+						.jenis(addl)
+						.build();
+					final JenisPage page = new JenisPage();
+					page.setArguments(intent.getExtras());
+					return page;
+				}
 			}
 			return new UnknownPage();
 		}
