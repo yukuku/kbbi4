@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<item android:title="Kategori">
+		<menu>
+			<group android:checkableBehavior="single">
+				<item
+					android:id="@+id/menuBahasa"
+					android:icon="@drawable/ic_menu_gallery"
+					android:title="Asal Bahasa" />
+				<item
+					android:id="@+id/menuBidang"
+					android:icon="@drawable/ic_menu_camera"
+					android:title="Bidang" />
+			</group>
+		</menu>
+	</item>
+
+	<group android:id="@+id/groupAbout">
+		<item
+			android:id="@+id/menuAbout"
+			android:icon="@drawable/ic_error_outline_black_24dp"
+			android:title="@string/menu_about" />
+	</group>
+
+</menu>

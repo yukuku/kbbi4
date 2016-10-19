@@ -18,7 +18,7 @@ import java.util.List;
 
 import static yuku.kbbi4.util.Views.Find;
 
-public class MainActivity extends BaseActivity {
+public class MainxActivity extends BaseActivity {
 
 	TextView tCarian;
 	RecyclerView lsAcus;
@@ -30,11 +30,11 @@ public class MainActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		lsAcus = find(R.id.lsAcus);
+		//lsAcus = find(R.id.lsAcus);
 		lsAcus.setLayoutManager(new LinearLayoutManager(this));
 		lsAcus.setAdapter(adapter = new AcusAdapter());
 
-		tCarian = find(R.id.tCarian);
+		//tCarian = find(R.id.tCarian);
 		tCarian.addTextChangedListener(new DefaultTextWatcher(s -> debouncer.submit(s.toString().trim())));
 
 		Background.run(() -> Acu.INSTANCE.warmup());
@@ -86,7 +86,7 @@ public class MainActivity extends BaseActivity {
 				final String acu = acus.get(holder.getAdapterPosition());
 				final Renderer renderer = Acu.INSTANCE.getRenderer(acu);
 
-				new AlertDialog.Builder(MainActivity.this)
+				new AlertDialog.Builder(MainxActivity.this)
 					.setMessage(renderer.render())
 					.setPositiveButton("OK", null)
 					.show();

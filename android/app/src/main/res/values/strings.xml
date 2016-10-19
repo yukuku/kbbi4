@@ -1,3 +1,9 @@
 <resources>
-	<string name="app_name">kbbi4</string>
+	<string name="app_name">KBBI V</string>
+
+	<string name="navigation_drawer_open">Buka menu</string>
+	<string name="navigation_drawer_close">Tutup menu</string>
+
+	<string name="menu_about">Tentang</string>
+	<string name="menu_search">Cari</string>
 </resources>

@@ -3,13 +3,13 @@ apply plugin: 'kotlin-android'
 apply plugin: 'me.tatarka.retrolambda'
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion "24.0.2"
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
     defaultConfig {
         applicationId "yuku.kbbi4"
-        minSdkVersion 17
-        targetSdkVersion 24
-        versionCode 1
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 2
         versionName "0.0.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         resConfigs 'en'
@@ -26,7 +26,7 @@ android {
         }
     }
     sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
+        main.java.srcDirs += 'src/menu_main/kotlin'
     }
 }
 
@@ -35,9 +35,11 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:24.2.1'
-    testCompile 'junit:junit:4.12'
-    compile 'com.android.support:recyclerview-v7:24.2.1'
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile "com.android.support:appcompat-v7:$supportLibraryVersion"
+    compile "com.android.support:recyclerview-v7:$supportLibraryVersion"
     compile 'com.carrotsearch:hppc:0.7.1'
+    compile "com.android.support:design:$supportLibraryVersion"
+    compile 'com.commonsware.cwac:pager:0.2.5'
+    testCompile 'junit:junit:4.12'
 }

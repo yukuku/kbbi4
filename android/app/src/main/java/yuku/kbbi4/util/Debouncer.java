@@ -56,7 +56,7 @@ public abstract class Debouncer<RequestType, ResultType> {
 	}
 
 	/**
-	 * Call this on the main thread.
+	 * Call this on the menu_main thread.
 	 * @param defaultDelay The default delay in ms before {@link #process(RequestType)} is performed.
 	 */
 	public Debouncer(final long defaultDelay) {
@@ -88,7 +88,7 @@ public abstract class Debouncer<RequestType, ResultType> {
 				// check again if this is still needed
 				if (isOutdated(2, this.id, serial.get())) return;
 
-				// we are okay, deliver result in main thread
+				// we are okay, deliver result in menu_main thread
 				final Message msg = Message.obtain();
 				msg.what = MSG_ON_RESULT;
 				msg.arg1 = this.id;
