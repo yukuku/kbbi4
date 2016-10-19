@@ -26,3 +26,7 @@
 -keep class **Henson { *; }
 -keep class **$$IntentBuilder { *; }
 
+# remove can't find referenced class java.lang.invoke.LambdaForm$Hidden
+-dontwarn java.lang.invoke.**
+
+-dontobfuscate
