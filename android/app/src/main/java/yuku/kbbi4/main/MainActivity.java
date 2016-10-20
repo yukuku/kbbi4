@@ -184,6 +184,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 			return;
 		}
 
+		if (vp.getCurrentItem() != 0) {
+			vp.setCurrentItem(vp.getCurrentItem() - 1, true);
+			return;
+		}
+
 		super.onBackPressed();
 	}
 
