@@ -529,7 +529,7 @@ def main():
     # kategori index
     for jenis in ['bahasa', 'bidang']:
         with open('{}/kat_index_{}.txt'.format(base_out_dir, jenis), 'wb') as fo:
-            f = list(filter(lambda k: k.jenis == jenis, all_kategoris))
+            f = sorted(list(filter(lambda k: k.jenis == jenis, all_kategoris)), key=lambda k: k.desc.lower())
 
             # length first
             write_varint(fo, len(f))
