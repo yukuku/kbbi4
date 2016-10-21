@@ -8,18 +8,18 @@ import java.io.BufferedInputStream
 data class Kategori(@JvmField val nilai: String, @JvmField val desc: String)
 
 object KategoriRepo {
-    const val TAG = "Kategori"
+    const val TAG = "KategoriRepo"
 
     private val repo by lazy {
         val tl = TimingLogger(TAG, "load kategori repo")
 
-        val res = mapOf(*listOf("bahasa", "bidang").map { jenis ->
-            ValueReader(BufferedInputStream(App.context.assets.open("dictdata/kat_index_$jenis.txt"), 40000)).use { vr ->
+        val res = mapOf(*listOf("bahasa", "bidang", "ragam", "kelas", "jenis").map { facet ->
+            ValueReader(BufferedInputStream(App.context.assets.open("dictdata/kat_index_$facet.txt"), 40000)).use { vr ->
                 val size = vr.readVarint()
                 val list = Array(size) {
                     Kategori(vr.readString(), vr.readString())
                 }
-                Pair(jenis, list.toList())
+                Pair(facet, list.toList())
             }
         }.toTypedArray())
 

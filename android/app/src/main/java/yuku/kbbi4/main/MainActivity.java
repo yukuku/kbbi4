@@ -117,15 +117,15 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 					pd = new SimplePageDescriptor("definition:" + acu_id + ":" + Math.random(), "Definition");
 					break;
 				}
-				case "jenis": {
-					final String jenis = intent.getStringExtra("jenis");
-					pd = new SimplePageDescriptor("jenis:" + jenis + ":" + Math.random(), "Jenis " + jenis);
+				case "facet": {
+					final String facet = intent.getStringExtra("facet");
+					pd = new SimplePageDescriptor("facet:" + facet + ":" + Math.random(), "Facet " + facet);
 					break;
 				}
 				case "kategori": {
-					final String jenis = intent.getStringExtra("jenis");
+					final String facet = intent.getStringExtra("facet");
 					final String nilai = intent.getStringExtra("nilai");
-					pd = new SimplePageDescriptor("kategori:" + jenis + ":" + nilai + ":" + Math.random(), "Kategori " + nilai);
+					pd = new SimplePageDescriptor("kategori:" + facet + ":" + nilai + ":" + Math.random(), "Kategori " + nilai);
 					break;
 				}
 				default:
@@ -150,17 +150,17 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 		);
 	}
 
-	public static void requestJenisPage(final String jenis) {
+	public static void requestFacetPage(final String facet) {
 		App.lbm().sendBroadcast(new Intent(ACTION_REQUEST_NEW_PAGE)
-			.putExtra("kind", "jenis")
-			.putExtra("jenis", jenis)
+			.putExtra("kind", "facet")
+			.putExtra("facet", facet)
 		);
 	}
 
-	public static void requestKategoriPage(final String jenis, final String nilai) {
+	public static void requestKategoriPage(final String facet, final String nilai) {
 		App.lbm().sendBroadcast(new Intent(ACTION_REQUEST_NEW_PAGE)
 			.putExtra("kind", "kategori")
-			.putExtra("jenis", jenis)
+			.putExtra("facet", facet)
 			.putExtra("nilai", nilai)
 		);
 	}
@@ -320,10 +320,19 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
 		switch (itemId) {
 			case R.id.menuBahasa:
-				requestJenisPage("bahasa");
+				requestFacetPage("bahasa");
 				break;
 			case R.id.menuBidang:
-				requestJenisPage("bidang");
+				requestFacetPage("bidang");
+				break;
+			case R.id.menuKelas:
+				requestFacetPage("kelas");
+				break;
+			case R.id.menuRagam:
+				requestFacetPage("ragam");
+				break;
+			case R.id.menuJenis:
+				requestFacetPage("jenis");
 				break;
 			case R.id.menuAbout:
 				new AlertDialog.Builder(this)
@@ -361,17 +370,17 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 					page.setArguments(intent.getExtras());
 					return page;
 				}
-				case "jenis": {
-					final Intent intent = Henson.with(MainActivity.this).gotoJenisPage()
-						.jenis(args[1])
+				case "facet": {
+					final Intent intent = Henson.with(MainActivity.this).gotoFacetPage()
+						.facet(args[1])
 						.build();
-					final JenisPage page = new JenisPage();
+					final FacetPage page = new FacetPage();
 					page.setArguments(intent.getExtras());
 					return page;
 				}
 				case "kategori": {
 					final Intent intent = Henson.with(MainActivity.this).gotoKategoriPage()
-						.jenis(args[1])
+						.facet(args[1])
 						.nilai(args[2])
 						.build();
 					final KategoriPage page = new KategoriPage();

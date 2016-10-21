@@ -23,7 +23,7 @@ import static yuku.kbbi4.util.Views.Find;
 
 public class KategoriPage extends ContentPage {
 	@InjectExtra
-	String jenis;
+	String facet;
 
 	@InjectExtra
 	String nilai;
@@ -53,14 +53,14 @@ public class KategoriPage extends ContentPage {
 	public void onViewCreated(final View view, @Nullable final Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 
-		kategori = KategoriRepo.INSTANCE.getKategori(jenis, nilai);
+		kategori = KategoriRepo.INSTANCE.getKategori(facet, nilai);
 
 		tKategori.setText(kategori.desc);
 		lsAcus.setLayoutManager(new LinearLayoutManager(getActivity()));
 		lsAcus.setAdapter(acusAdapter = new AcusAdapter());
 
 		final List<String> acus = new ArrayList<>();
-		for (final int acuId : KategoriRepo.INSTANCE.listAcuIds(jenis, nilai)) {
+		for (final int acuId : KategoriRepo.INSTANCE.listAcuIds(facet, nilai)) {
 			acus.add(Acu.INSTANCE.getAcu(acuId));
 		}
 		acusAdapter.setData(acus);

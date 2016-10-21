@@ -54,7 +54,7 @@ class Renderer(val file_no: Int, val offset: Int, val acu_click: (Int) -> Unit) 
                     res.setSpan(UnderlineSpan(), len, res.length, 0)
                     res.append(": ")
                 }
-                20, 21, 22, 23, 24 -> run {
+                20, 21, 22, 23, 24, 25 -> run {
                     val len = res.length
                     res.append(cav.string)
                     res.setSpan(ForegroundColorSpan(Color.BLUE), len, res.length, 0)

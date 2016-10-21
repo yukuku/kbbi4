@@ -7,11 +7,23 @@
 				<item
 					android:id="@+id/menuBahasa"
 					android:icon="@drawable/ic_menu_gallery"
-					android:title="Asal Bahasa" />
+					android:title="Bahasa" />
 				<item
 					android:id="@+id/menuBidang"
 					android:icon="@drawable/ic_menu_camera"
 					android:title="Bidang" />
+				<item
+					android:id="@+id/menuKelas"
+					android:icon="@drawable/ic_menu_gallery"
+					android:title="Kelas" />
+				<item
+					android:id="@+id/menuRagam"
+					android:icon="@drawable/ic_menu_camera"
+					android:title="Ragam" />
+				<item
+					android:id="@+id/menuJenis"
+					android:icon="@drawable/ic_menu_gallery"
+					android:title="Jenis" />
 			</group>
 		</menu>
 	</item>

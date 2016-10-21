@@ -38,6 +38,7 @@ class Makna:
         self.is_ki = None
         self.is_kp = None
         self.is_akr = None
+        self.ragams = []
         self.contohs = []
 
     def __repr__(self):
@@ -103,7 +104,7 @@ for row in conn.execute('select eid, entri, jenis_rujuk, entri_rujuk, induk, sil
     e.nilai = row[1]
 
     # get makna
-    for rowm in conn.execute('select mid, makna, kelas, bahasa, bidang, ilmiah, kimia, ki, kp, akr from Makna where eid=? and aktif=1', (e.eid,)).fetchall():
+    for rowm in conn.execute('select mid, makna, kelas, bahasa, bidang, ilmiah, kimia, ki, kp, akr, ragam, ragam_var from Makna where eid=? and aktif=1', (e.eid,)).fetchall():
         m = Makna()
         m.mid = rowm[0]
         m.nilai = rowm[1]
@@ -115,6 +116,8 @@ for row in conn.execute('select eid, entri, jenis_rujuk, entri_rujuk, induk, sil
         m.is_ki = bool(rowm[7])
         m.is_kp = bool(rowm[8])
         m.is_akr = bool(rowm[9])
+        if rowm[10]: m.ragams.append(rowm[10])
+        if rowm[11]: m.ragams.append(rowm[11])
         e.maknas.append(m)
 
         # get contoh
@@ -183,7 +186,7 @@ for row in conn.execute('select jenis, katid, kategori from Kategori where aktif
     k = Kategori()
     k.jenis = row[0]
     k.nilai = row[1]
-    k.desc = row[2]
+    k.desc = row[2] or row[1]
     all_kategoris.append(k)
 
 print('entry count:', len(all_entries))
@@ -290,6 +293,7 @@ CODE_BAHASA = 21  # text
 CODE_BIDANG = 22  # text
 CODE_ILMIAH = 23  # text
 CODE_KIMIA = 24  # text
+CODE_RAGAM = 25  # text
 CODE_ki = 30  # null
 CODE_kp = 31  # null
 CODE_akr = 32  # null
@@ -390,6 +394,11 @@ def render_acu(acu):
                 if not still_empty: d.text(' ')
                 still_empty = False
                 d.esc_null(CODE_akr)
+
+            for ragam in makna.ragams:
+                if not still_empty: d.text(' ')
+                still_empty = False
+                d.esc_text(CODE_RAGAM, ragam)
 
             # makna utama
             if not still_empty: d.text(' ')
@@ -494,49 +503,48 @@ def main():
 
             fo.write(b)
 
-    # kategori list per bahasa
-    bahasas = {m.bahasa: [] for e in all_entries for m in e.maknas if m.bahasa}
-    for e in all_entries:
-        for m in e.maknas:
-            if m.bahasa:
-                bahasas[m.bahasa].append(e.acu)
-    for bahasa, acus in bahasas.items():
-        acus = sorted(set(acus))
-        print(u'Kategori bahasa: {} ({} acus)'.format(bahasa, len(acus)))
-        with open('{}/kat_bahasa_{}.txt'.format(base_out_dir, bahasa), 'wb') as fo:
-            # length first
-            write_varint(fo, len(acus))
+    # kategori list per facet
+    def facetize(fname, fextractor, fhas, is_jenis=False):
+        fmap = {}
+        for e in all_entries:
+            if is_jenis: # special case
+                if fhas(e):
+                    for fvalue in fextractor(e):
+                        ls = fmap.get(fvalue)
+                        if not ls: fmap[fvalue] = ls = []
+                        ls.append(e.acu)
+            else:
+                for m in e.maknas:
+                    if fhas(m):
+                        for fvalue in fextractor(m):
+                            ls = fmap.get(fvalue)
+                            if not ls: fmap[fvalue] = ls = []
+                            ls.append(e.acu)
+        for fvalue, acus in fmap.items():
+            acus = sorted(set(acus))
+            print(u'Facet {}: {} ({} acus)'.format(fname, fvalue, len(acus)))
+            with open('{}/kat_{}_{}.txt'.format(base_out_dir, fname, fvalue), 'wb') as fo:
+                # length first
+                write_varint(fo, len(acus))
 
-            for a in acus:
-                write_varint(fo, a.aid)
+                for a in acus:
+                    write_varint(fo, a.aid)
 
-    # kategori list per bidang
-    bidangs = {m.bidang: [] for e in all_entries for m in e.maknas if m.bidang}
-    for e in all_entries:
-        for m in e.maknas:
-            if m.bidang:
-                bidangs[m.bidang].append(e.acu)
-    for bidang, acus in bidangs.items():
-        acus = sorted(set(acus))
-        print(u'Kategori bidang: {} ({} entries)'.format(bidang, len(acus)))
-        with open('{}/kat_bidang_{}.txt'.format(base_out_dir, bidang), 'wb') as fo:
-            # length first
-            write_varint(fo, len(acus))
-
-            for a in acus:
-                write_varint(fo, a.aid)
-
-    # kategori index
-    for jenis in ['bahasa', 'bidang']:
-        with open('{}/kat_index_{}.txt'.format(base_out_dir, jenis), 'wb') as fo:
-            f = sorted(list(filter(lambda k: k.jenis == jenis, all_kategoris)), key=lambda k: k.desc.lower())
+        with open('{}/kat_index_{}.txt'.format(base_out_dir, fname), 'wb') as fo:
+            filtered = sorted(list(filter(lambda k: k.jenis == fname, all_kategoris)), key=lambda k: k.desc.lower())
 
             # length first
-            write_varint(fo, len(f))
+            write_varint(fo, len(filtered))
 
-            for k in f:
+            for k in filtered:
                 write_text(fo, k.nilai)
                 write_text(fo, k.desc)
+
+    facetize('bahasa', lambda m: [m.bahasa], lambda m: m.bahasa)
+    facetize('bidang', lambda m: [m.bidang], lambda m: m.bidang)
+    facetize('kelas', lambda m: [m.kelas], lambda m: m.kelas)
+    facetize('ragam', lambda m: m.ragams, lambda m: m.ragams)
+    facetize('jenis', lambda e: [e.jenis], lambda e: e.jenis, is_jenis=True)
 
 
 def cari_peribahasa():

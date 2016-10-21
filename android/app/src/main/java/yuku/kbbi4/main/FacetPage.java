@@ -19,11 +19,11 @@ import java.util.List;
 
 import static yuku.kbbi4.util.Views.Find;
 
-public class JenisPage extends ContentPage {
+public class FacetPage extends ContentPage {
 	@InjectExtra
-	String jenis;
+	String facet;
 
-	TextView tJenis;
+	TextView tFacet;
 	RecyclerView lsKategoris;
 
 	KategorisAdapter kategorisAdapter;
@@ -38,7 +38,7 @@ public class JenisPage extends ContentPage {
 	@Override
 	public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable final Bundle savedInstanceState) {
 		final View res = inflater.inflate(R.layout.page_main_jenis, container, false);
-		tJenis = Find(res, R.id.tJenis);
+		tFacet = Find(res, R.id.tFacet);
 		lsKategoris = Find(res, R.id.lsKategoris);
 		return res;
 	}
@@ -47,10 +47,10 @@ public class JenisPage extends ContentPage {
 	public void onViewCreated(final View view, @Nullable final Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 
-		tJenis.setText(jenis);
+		tFacet.setText(facet);
 		lsKategoris.setLayoutManager(new LinearLayoutManager(getActivity()));
 		lsKategoris.setAdapter(kategorisAdapter = new KategorisAdapter());
-		kategorisAdapter.setData(KategoriRepo.INSTANCE.listKategoris(jenis));
+		kategorisAdapter.setData(KategoriRepo.INSTANCE.listKategoris(facet));
 	}
 
 	static class ViewHolder extends RecyclerView.ViewHolder {
@@ -80,7 +80,7 @@ public class JenisPage extends ContentPage {
 
 			holder.itemView.setOnClickListener(v -> {
 				final Kategori kategori = kategoris.get(holder.getAdapterPosition());
-				MainActivity.requestKategoriPage(jenis, kategori.nilai);
+				MainActivity.requestKategoriPage(facet, kategori.nilai);
 			});
 		}
 
