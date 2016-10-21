@@ -72,6 +72,7 @@ class Kategori:
         self.jenis = None
         self.nilai = None
         self.desc = None
+        self.urutan = None
 
 
 index_acu_nilai = {}
@@ -91,7 +92,7 @@ def canonize(s: str):
     return s
 
 
-conn = sqlite3.connect('in/kbbi4v6.db')
+conn = sqlite3.connect('in/kbbi4v7.db')
 mids_with_contoh = set()
 for row in conn.execute('select distinct mid from Contoh where aktif=1').fetchall():
     mids_with_contoh.add(row[0])
@@ -180,13 +181,15 @@ for e in all_entries:
 for e in all_entries:
     if not e.maknas and not e.induk and not e.anaks and not e.jenis_rujuk and not e.entri_rujuk:
         logging.warning("{} has no makna and no induk/anaks and no valid entri_rujuk".format(e))
+    print(e)
 
 # read all kategoris
-for row in conn.execute('select jenis, katid, kategori from Kategori where aktif=1').fetchall():
+for row in conn.execute('select jenis, katid, kategori, urutan from Kategori where aktif=1').fetchall():
     k = Kategori()
     k.jenis = row[0]
     k.nilai = row[1]
     k.desc = row[2] or row[1]
+    k.urutan = row[3]
     all_kategoris.append(k)
 
 print('entry count:', len(all_entries))
@@ -531,7 +534,7 @@ def main():
                     write_varint(fo, a.aid)
 
         with open('{}/kat_index_{}.txt'.format(base_out_dir, fname), 'wb') as fo:
-            filtered = sorted(list(filter(lambda k: k.jenis == fname, all_kategoris)), key=lambda k: k.desc.lower())
+            filtered = sorted(list(filter(lambda k: k.jenis == fname, all_kategoris)), key=lambda k: (k.urutan, k.desc.lower()))
 
             # length first
             write_varint(fo, len(filtered))
