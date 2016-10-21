@@ -43,5 +43,6 @@ dependencies {
     provided "com.f2prateek.dart:dart-processor:$dartVersion"
     compile "com.f2prateek.dart:henson:$dartVersion"
     apt "com.f2prateek.dart:henson-processor:$dartVersion"
+    compile 'com.simplecityapps:recyclerview-fastscroll:1.0.11'
     testCompile 'junit:junit:4.12'
 }

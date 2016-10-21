@@ -9,14 +9,11 @@
 		android:id="@+id/tKategori"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_marginBottom="32dp"
-		android:layout_marginEnd="16dp"
-		android:layout_marginStart="16dp"
-		android:layout_marginTop="16dp"
+		android:layout_margin="16dp"
 		android:textAppearance="@style/TextAppearance.AppCompat.Title"
 		tools:text="Desc Kategori" />
 
-	<android.support.v7.widget.RecyclerView
+	<com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
 		android:id="@+id/lsAcus"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent" />

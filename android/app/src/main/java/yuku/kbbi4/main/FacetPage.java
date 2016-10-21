@@ -37,7 +37,7 @@ public class FacetPage extends ContentPage {
 	@Nullable
 	@Override
 	public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable final Bundle savedInstanceState) {
-		final View res = inflater.inflate(R.layout.page_main_jenis, container, false);
+		final View res = inflater.inflate(R.layout.page_main_facet, container, false);
 		tFacet = Find(res, R.id.tFacet);
 		lsKategoris = Find(res, R.id.lsKategoris);
 		return res;
