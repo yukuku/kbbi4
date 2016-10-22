@@ -89,6 +89,11 @@ class Renderer(val file_no: Int, val offset: Int, val acu_click: (Int) -> Unit) 
                         res.append(" >> ")
                     }
                 }
+                42 -> run {
+                    val len = res.length
+                    res.append(cav.string)
+                    res.setSpan(StyleSpan(Typeface.BOLD), len, res.length, 0)
+                }
                 50 -> run {
                     val len = res.length
                     res.append(cav.string)

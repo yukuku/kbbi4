@@ -315,6 +315,7 @@ CODE_kp = 31  # null
 CODE_akr = 32  # null
 CODE_LINK_ACU = 40  # int
 CODE_LINK_INDUK = 41  # int
+CODE_LINK_NOT_FOUND = 42  # text
 CODE_CONTOH = 50  # text
 CODE_BOLD = 60  # text
 CODE_ITALIC = 61  # text
@@ -360,11 +361,15 @@ def render_acu(acu):
 
         d.text('\n')
 
-        if entri.jenis_rujuk and entri.acu_rujuk:
+        if entri.jenis_rujuk:
             d.text(entri.jenis_rujuk)
             d.text(' ')
-            d.esc_uint(CODE_LINK_ACU, entri.acu_rujuk.aid)
-            d.text('\n')
+            if entri.acu_rujuk:
+                d.esc_uint(CODE_LINK_ACU, entri.acu_rujuk.aid)
+                d.text('\n')
+            else:
+                # link ga ketemu, jadi manual saja dituliskan tanpa link
+                d.esc_text(CODE_LINK_NOT_FOUND, entri.entri_rujuk)
 
         d.text('\n')
 
@@ -419,7 +424,25 @@ def render_acu(acu):
             # makna utama
             if not still_empty: d.text(' ')
 
-            kenali_tag(d, makna.nilai, ['b', 'i', 'sub', 'sup'], [CODE_BOLD, CODE_ITALIC, CODE_SUB, CODE_SUP])
+            def cacingin(s, e_nilai, e_jenis):
+                diganti = '[' + re.sub(r' \(\d+\)', '', e_nilai) + ']'
+
+                while diganti in s:
+                    if e_jenis == 'dasar': ganti = '--'
+                    elif e_jenis == 'berimbuhan': ganti = '~'
+                    else:
+                        ganti = '--'
+                        logging.warning('{}: makna or contoh contains [entri] but entri.jenis is {}'.format(e_nilai, e_jenis))
+                    s = s.replace(diganti, ganti)
+
+                if '[' in s:
+                    logging.warning('{} -> {}: makna or contoh still contain brackets: {}'.format(e_nilai, diganti, s))
+
+                return s
+
+            m_nilai = cacingin(makna.nilai, entri.nilai, entri.jenis)
+
+            kenali_tag(d, m_nilai, ['b', 'i', 'sub', 'sup'], [CODE_BOLD, CODE_ITALIC, CODE_SUB, CODE_SUP])
 
             # sesudah makna utama
             if makna.ilmiah:
@@ -436,7 +459,8 @@ def render_acu(acu):
                 for contoh in makna.contohs:
                     if not fst:
                         d.text('; ')
-                    d.esc_text(CODE_CONTOH, contoh.nilai)
+                    c_nilai = cacingin(contoh.nilai, entri.nilai, entri.jenis)
+                    d.esc_text(CODE_CONTOH, c_nilai)
                     fst = False
 
         code = 0
