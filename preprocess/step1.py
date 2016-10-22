@@ -11,6 +11,7 @@ class Entri:
         self.maknas = []
         self.jenis_rujuk = None
         self.entri_rujuk = None
+        self.acu_rujuk = None  # processed data by looking up entri and acu
         self.induk = None
         self.anaks = []
         self.silabel = None
@@ -167,9 +168,22 @@ for i, acu in enumerate(all_acus):
 for e in all_entries:
     er = e.entri_rujuk
     if er:
-        e.entri_rujuk = index_entri_nilai.get(er)
-        if not e.entri_rujuk:
-            logging.warning("{} entri_rujuk '{}' not found".format(e, er))
+        er2 = index_entri_nilai.get(er)
+        if er2:
+            e.acu_rujuk = er2.acu
+        else:
+            ar2 = index_acu_nilai.get(er)
+            if ar2:
+                e.acu_rujuk = ar2
+            else:
+                # coba huruf kecil dan buang angka dalam kurung
+                er = re.sub(r' \(\d+\)', '', er).lower().strip()
+                ar2 = index_acu_nilai.get(er)
+                if ar2:
+                    e.acu_rujuk = ar2
+                else:
+                    logging.warning("{} entri_rujuk or acu '{}' not found".format(e, er))
+
 
 # make each Entri.induk to point to the object
 for e in all_entries:
@@ -181,7 +195,6 @@ for e in all_entries:
 for e in all_entries:
     if not e.maknas and not e.induk and not e.anaks and not e.jenis_rujuk and not e.entri_rujuk:
         logging.warning("{} has no makna and no induk/anaks and no valid entri_rujuk".format(e))
-    print(e)
 
 # read all kategoris
 for row in conn.execute('select jenis, katid, kategori, urutan from Kategori where aktif=1').fetchall():
@@ -347,10 +360,10 @@ def render_acu(acu):
 
         d.text('\n')
 
-        if entri.jenis_rujuk and entri.entri_rujuk:
+        if entri.jenis_rujuk and entri.acu_rujuk:
             d.text(entri.jenis_rujuk)
             d.text(' ')
-            d.esc_uint(CODE_LINK_ACU, entri.entri_rujuk.acu.aid)
+            d.esc_uint(CODE_LINK_ACU, entri.acu_rujuk.aid)
             d.text('\n')
 
         d.text('\n')
