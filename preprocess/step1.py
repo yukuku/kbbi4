@@ -354,7 +354,7 @@ def kenali_tag(d: Descml, s: str, tags: list, codes: list):
     d.text(s[pos:])
 
 
-def write_anaks(d: Descml, entri: Entri, allowed_anak):
+def write_anaks(d: Descml, entri: Entri, allowed_anak, text_before: str):
     has_written = False
     code = 0
     fst = True
@@ -364,6 +364,7 @@ def write_anaks(d: Descml, entri: Entri, allowed_anak):
         if new_code != code:
             fst = True
             code = new_code
+            if text_before: d.text(text_before)
             d.esc_null(code)
         if not fst:
             d.text('; ')
@@ -419,7 +420,7 @@ def render_acu(acu):
                 # link ga ketemu, jadi manual saja dituliskan tanpa link
                 d.esc_text(CODE_LINK_NOT_FOUND, entri.entri_rujuk)
 
-        if write_anaks(d, entri, lambda anak: anak.jenis == 'varian'):
+        if write_anaks(d, entri, lambda anak: anak.jenis == 'varian', ''):
             d.text('\n')
 
         d.text('\n')
@@ -541,7 +542,7 @@ def render_acu(acu):
                     d.esc_text(CODE_CONTOH, c_nilai)
                     fst = False
 
-        write_anaks(d, entri, lambda anak: anak.jenis != 'varian')
+        write_anaks(d, entri, lambda anak: anak.jenis != 'varian', '\n\n')
 
     d.eof()
     return d.buf
