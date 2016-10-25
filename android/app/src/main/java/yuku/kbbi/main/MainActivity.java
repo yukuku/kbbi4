@@ -35,6 +35,7 @@ import yuku.kbbi.widget.SearchWrapper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import static yuku.kbbi.util.Views.*;
 
@@ -76,14 +77,19 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
 		searchWrapper = new SearchWrapper(find(R.id.searchView));
 		searchWrapper.setOnQueryTextListener(new SearchWrapper.OnQueryTextListener() {
+			@NonNull
+			private String proc(final @NonNull String query) {
+				return query.trim().toLowerCase(Locale.US);
+			}
+
 			@Override
 			public void onQueryTextSubmit(@NonNull final String query) {
-				debouncer.submit(query.trim(), 0);
+				debouncer.submit(proc(query), 0);
 			}
 
 			@Override
 			public void onQueryTextChange(@NonNull final String query) {
-				debouncer.submit(query.trim());
+				debouncer.submit(proc(query));
 			}
 		});
 

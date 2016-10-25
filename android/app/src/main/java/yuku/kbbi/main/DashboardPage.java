@@ -12,11 +12,10 @@ import static yuku.kbbi.util.Views.Find;
 
 public class DashboardPage extends ContentPage {
 	static String[] facets = {
-		"bahasa", "Bahasa", "Dari mana suatu kata berasal",
-		"bidang", "Bidang", "Ranah kata bla bla bla",
-		"kelas", "Kelas", "Kata sifat, benda, ganti, dan lain-lain",
-		"ragam", "Ragam", "Arkais, cakapan, hormat, kasar, dan klasik",
-		"jenis", "Jenis", "Apakah kata dasar atau tidak",
+		"kelas", "Kelas kata", "nomina, verba, …",
+		"ragam", "Ragam", "hormat, cakapan, …",
+		"bahasa", "Bahasa", "Jawa, Inggris, …",
+		"bidang", "Bidang", "Komputer, Olahraga, …",
 	};
 
 	ViewGroup panelFacets;
@@ -33,21 +32,28 @@ public class DashboardPage extends ContentPage {
 	public void onViewCreated(final View view, @Nullable final Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 
-		for (int i = 0; i < facets.length; i+=3) {
+		View row = null;
+		for (int i = 0; i < facets.length; i += 3) {
 			final String name = facets[i];
-			final String title = facets[i+1];
-			final String desc = facets[i+2];
+			final String title = facets[i + 1];
+			final String desc = facets[i + 2];
 
-			final View row = getActivity().getLayoutInflater().inflate(R.layout.dashboard_facet_row, panelFacets, false);
-			final TextView tFacetTitle = Find(row, R.id.tFacetTitle);
-			final TextView tFacetDesc = Find(row, R.id.tFacetDesc);
+			final int idx = i / 3;
+
+			if (idx % 2 == 0) {
+				row = getActivity().getLayoutInflater().inflate(R.layout.dashboard_facet_row, panelFacets, false);
+				panelFacets.addView(row);
+			}
+
+			assert row != null;
+			final View cell = Find(row, idx % 2 == 0 ? R.id.cell0 : R.id.cell1);
+
+			final TextView tFacetTitle = Find(cell, R.id.tFacetTitle);
+			final TextView tFacetDesc = Find(cell, R.id.tFacetDesc);
 			tFacetTitle.setText(title);
 			tFacetDesc.setText(desc);
-			row.setOnClickListener(v -> {
-				MainActivity.requestFacetPage(name);
-			});
 
-			panelFacets.addView(row);
+			cell.setOnClickListener(v -> MainActivity.requestFacetPage(name));
 		}
 	}
 }
