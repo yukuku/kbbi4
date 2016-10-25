@@ -11,7 +11,7 @@ class Entri:
         self.maknas = []
         self.jenis_rujuk = None
         self.entri_rujuk = None
-        self.acu_rujuk = None  # processed data by looking up entri and acu
+        self.acu_rujuks = []  # processed data by looking up entri and acu
         self.induk = None
         self.anaks = []
         self.silabel = None
@@ -178,19 +178,30 @@ for e in all_entries:
     if er:
         er2 = index_entri_nilai.get(er)
         if er2:
-            e.acu_rujuk = er2.acu
+            e.acu_rujuks.append(er2.acu)
         else:
             ar2 = index_acu_nilai.get(er)
             if ar2:
-                e.acu_rujuk = ar2
+                e.acu_rujuks.append(ar2)
             else:
                 # coba huruf kecil dan buang angka dalam kurung
                 er = re.sub(r' \(\d+\)', '', er).lower().strip()
                 ar2 = index_acu_nilai.get(er)
                 if ar2:
-                    e.acu_rujuk = ar2
+                    e.acu_rujuks.append(ar2)
                 else:
-                    logging.warning("{} entri_rujuk or acu '{}' not found".format(e, er))
+                    # coba split di ';'
+                    for er in re.split(r'\s*;\s*', er):
+                        er2 = index_entri_nilai.get(er)
+                        if er2:
+                            e.acu_rujuks.append(er2.acu)
+                        else:
+                            er = re.sub(r' \(\d+\)', '', er).lower().strip()
+                            ar2 = index_acu_nilai.get(er)
+                            if ar2:
+                                e.acu_rujuks.append(ar2)
+                            else:
+                                logging.warning("{} (jenis_rujuk {}): entri_rujuk or acu '{}' not found".format(e, e.jenis_rujuk, er))
 
 # make each Entri.induk to point to the object
 for e in all_entries:
@@ -343,12 +354,38 @@ def kenali_tag(d: Descml, s: str, tags: list, codes: list):
     d.text(s[pos:])
 
 
+def write_anaks(d: Descml, entri: Entri, allowed_anak):
+    has_written = False
+    code = 0
+    fst = True
+    for anak in sorted((anak for anak in entri.anaks if allowed_anak(anak)), key=lambda anak: anak.jenis):
+        has_written = True
+        new_code = globals()['CODE_ANAK_{}'.format(anak.jenis)]
+        if new_code != code:
+            fst = True
+            code = new_code
+            d.esc_null(code)
+        if not fst:
+            d.text('; ')
+        d.esc_uint(CODE_LINK_ACU, anak.acu.aid)
+        fst = False
+
+    return has_written
+
+
 def render_acu(acu):
     d = Descml()
     d.text_mode = False
-    for entri_idx, entri in enumerate(acu.entries):
-        if entri_idx > 0:
+
+    first_entri = True
+    for entri in acu.entries:
+        if entri.induk and entri.induk.acu.aid == entri.acu.aid and not entri.maknas:
+            logging.warning('skipping {} because induk refers to itself and has no makna'.format(entri))
+            continue
+
+        if not first_entri:
             d.text('\n\n')
+        first_entri = False
 
         if entri.induk:
             d.esc_uint(CODE_LINK_INDUK, entri.induk.acu.aid)
@@ -371,12 +408,19 @@ def render_acu(acu):
         if entri.jenis_rujuk:
             d.text(entri.jenis_rujuk)
             d.text(' ')
-            if entri.acu_rujuk:
-                d.esc_uint(CODE_LINK_ACU, entri.acu_rujuk.aid)
+            if entri.acu_rujuks:
+                fst_acu_rujuk = True
+                for acu_rujuk in entri.acu_rujuks:
+                    if not fst_acu_rujuk: d.text('; ')
+                    d.esc_uint(CODE_LINK_ACU, acu_rujuk.aid)
+                    fst_acu_rujuk = False
                 d.text('\n')
             else:
                 # link ga ketemu, jadi manual saja dituliskan tanpa link
                 d.esc_text(CODE_LINK_NOT_FOUND, entri.entri_rujuk)
+
+        if write_anaks(d, entri, lambda anak: anak.jenis == 'varian'):
+            d.text('\n')
 
         d.text('\n')
 
@@ -497,18 +541,7 @@ def render_acu(acu):
                     d.esc_text(CODE_CONTOH, c_nilai)
                     fst = False
 
-        code = 0
-        fst = True
-        for anak in sorted(entri.anaks, key=lambda anak: anak.jenis):
-            new_code = globals()['CODE_ANAK_{}'.format(anak.jenis)]
-            if new_code != code:
-                fst = True
-                code = new_code
-                d.esc_null(code)
-            if not fst:
-                d.text('; ')
-            d.esc_uint(CODE_LINK_ACU, anak.acu.aid)
-            fst = False
+        write_anaks(d, entri, lambda anak: anak.jenis != 'varian')
 
     d.eof()
     return d.buf
