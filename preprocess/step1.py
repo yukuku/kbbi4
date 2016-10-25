@@ -93,7 +93,15 @@ def canonize(s: str):
     return s
 
 
-conn = sqlite3.connect('in/kbbi4v7.db')
+conn = sqlite3.connect('in/kbbi5v2.db')
+
+# Bikin index supaya query di bawah pasti cepet
+conn.execute('create index if not exists Contoh_aktif on Contoh(aktif)')
+conn.execute('create index if not exists Entri_aktif on Entri(aktif)')
+conn.execute('create index if not exists Makna_eid_aktif on Makna(eid, aktif)')
+conn.execute('create index if not exists Contoh_mid_aktif on Contoh(mid, aktif)')
+conn.execute('create index if not exists Kategori_aktif on Kategori(aktif)')
+
 mids_with_contoh = set()
 for row in conn.execute('select distinct mid from Contoh where aktif=1').fetchall():
     mids_with_contoh.add(row[0])
@@ -183,7 +191,6 @@ for e in all_entries:
                     e.acu_rujuk = ar2
                 else:
                     logging.warning("{} entri_rujuk or acu '{}' not found".format(e, er))
-
 
 # make each Entri.induk to point to the object
 for e in all_entries:
@@ -425,18 +432,45 @@ def render_acu(acu):
             if not still_empty: d.text(' ')
 
             def cacingin(s, e_nilai, e_jenis):
-                diganti = '[' + re.sub(r' \(\d+\)', '', e_nilai) + ']'
+                entri_nonum = re.sub(r' \(\d+\)', '', e_nilai)
+                diganti = '[' + entri_nonum + ']'
 
-                while diganti in s:
-                    if e_jenis == 'dasar': ganti = '--'
-                    elif e_jenis == 'berimbuhan': ganti = '~'
-                    else:
-                        ganti = '--'
-                        logging.warning('{}: makna or contoh contains [entri] but entri.jenis is {}'.format(e_nilai, e_jenis))
-                    s = s.replace(diganti, ganti)
+                need_warning = False
+                if e_jenis == 'dasar':
+                    ganti = '--'
+                elif e_jenis == 'berimbuhan':
+                    ganti = '~'
+                else:
+                    ganti = '--'
+                    need_warning = True
 
-                if '[' in s:
-                    logging.warning('{} -> {}: makna or contoh still contain brackets: {}'.format(e_nilai, diganti, s))
+                s2 = s.replace(diganti, ganti)
+                if s2 != s and need_warning:
+                    logging.warning('{}: makna or contoh contains [entri] but entri.jenis is {}'.format(e_nilai, e_jenis))
+                s = s2
+
+                # coba panjangin match
+                # contoh: '[kata] dasar' menjadi: '[kata dasar]'
+                pos = 0
+                while 1:
+                    pos = s.find('[', pos)
+                    if pos == -1: break
+
+                    pos2 = s.find(']', pos)
+                    if pos2 == -1:
+                        logging.warning('{}: no closing bracket: {}'.format(e_nilai, diganti, s))
+                        break
+
+                    pos3 = (s[:pos2] + s[pos2 + 1:]).find(entri_nonum, pos + 1)
+                    if pos3 != pos + 1:
+                        logging.warning('{} -> {}: makna or contoh still contain brackets that could not be extended: {}'.format(e_nilai, diganti, s))
+                        # force replace!
+                        s = s[:pos] + ganti + s[pos2 + 1:]
+                        pos = pos2 + 1  # try to find next '['
+                        continue
+
+                    s = s[:pos] + ganti + s[pos + 1 + len(entri_nonum) + 1:]
+                    pos += len(ganti)
 
                 return s
 
@@ -547,7 +581,7 @@ def main():
     def facetize(fname, fextractor, fhas, is_jenis=False):
         fmap = {}
         for e in all_entries:
-            if is_jenis: # special case
+            if is_jenis:  # special case
                 if fhas(e):
                     for fvalue in fextractor(e):
                         ls = fmap.get(fvalue)
