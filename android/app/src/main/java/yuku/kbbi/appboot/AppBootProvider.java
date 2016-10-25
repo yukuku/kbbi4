@@ -1,11 +1,11 @@
-package yuku.kbbi4.appboot;
+package yuku.kbbi.appboot;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.annotation.Nullable;
-import yuku.kbbi4.App;
+import yuku.kbbi.App;
 
 public class AppBootProvider extends ContentProvider {
 	@Override

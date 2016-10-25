@@ -1,4 +1,4 @@
-package yuku.kbbi4.main;
+package yuku.kbbi.main;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -6,9 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import yuku.kbbi4.R;
+import yuku.kbbi.R;
 
-import static yuku.kbbi4.util.Views.Find;
+import static yuku.kbbi.util.Views.Find;
 
 public class DashboardPage extends ContentPage {
 	static String[] facets = {

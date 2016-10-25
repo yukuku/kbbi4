@@ -1,9 +1,9 @@
-package yuku.kbbi4.dictdata
+package yuku.kbbi.dictdata
 
 import android.util.Log
 import android.util.TimingLogger
-import yuku.kbbi4.App
-import yuku.kbbi4.dastruk.ValueReader
+import yuku.kbbi.App
+import yuku.kbbi.dastruk.ValueReader
 import java.io.BufferedInputStream
 import java.util.*
 

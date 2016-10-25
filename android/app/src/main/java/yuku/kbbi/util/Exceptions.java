@@ -1,4 +1,4 @@
-package yuku.kbbi4.util;
+package yuku.kbbi.util;
 
 public class Exceptions {
 	public interface Producer<T> {

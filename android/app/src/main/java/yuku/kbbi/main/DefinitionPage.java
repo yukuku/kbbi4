@@ -1,4 +1,4 @@
-package yuku.kbbi4.main;
+package yuku.kbbi.main;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,11 +10,11 @@ import android.widget.TextView;
 import com.f2prateek.dart.Dart;
 import com.f2prateek.dart.InjectExtra;
 import kotlin.Unit;
-import yuku.kbbi4.R;
-import yuku.kbbi4.dictdata.Acu;
-import yuku.kbbi4.dictdata.Renderer;
+import yuku.kbbi.R;
+import yuku.kbbi.dictdata.Acu;
+import yuku.kbbi.dictdata.Renderer;
 
-import static yuku.kbbi4.util.Views.Find;
+import static yuku.kbbi.util.Views.Find;
 
 public class DefinitionPage extends ContentPage {
 	@InjectExtra

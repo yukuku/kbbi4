@@ -1,4 +1,4 @@
-package yuku.kbbi4.dastruk;
+package yuku.kbbi.dastruk;
 
 /**
  * Code and value (either number or string)

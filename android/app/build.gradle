@@ -7,11 +7,11 @@ android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
     defaultConfig {
-        applicationId "yuku.kbbi4"
+        applicationId "yuku.kbbi5"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 4
-        versionName "0.0.4"
+        versionCode 5
+        versionName "0.0.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         resConfigs 'en'
     }

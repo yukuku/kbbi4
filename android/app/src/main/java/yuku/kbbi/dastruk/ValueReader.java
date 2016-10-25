@@ -1,4 +1,4 @@
-package yuku.kbbi4.dastruk;
+package yuku.kbbi.dastruk;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;

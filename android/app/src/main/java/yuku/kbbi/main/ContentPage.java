@@ -1,4 +1,4 @@
-package yuku.kbbi4.main;
+package yuku.kbbi.main;
 
 import android.support.v4.app.Fragment;
 

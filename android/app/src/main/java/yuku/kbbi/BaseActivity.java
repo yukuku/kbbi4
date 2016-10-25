@@ -1,11 +1,11 @@
-package yuku.kbbi4;
+package yuku.kbbi;
 
 import android.app.Activity;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import yuku.kbbi4.util.Views;
+import yuku.kbbi.util.Views;
 
 public abstract class BaseActivity extends AppCompatActivity {
 	/**

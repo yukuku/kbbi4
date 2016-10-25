@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="yuku.kbbi4"
+<manifest package="yuku.kbbi"
 	xmlns:android="http://schemas.android.com/apk/res/android">
 
 	<application
@@ -9,12 +9,12 @@
 		android:supportsRtl="true"
 		android:theme="@style/AppTheme">
 		<provider
-			android:name=".appboot.AppBootProvider"
-			android:authorities="yuku.kbbi4.appboot"
+			android:name="yuku.kbbi.appboot.AppBootProvider"
+			android:authorities="yuku.kbbi.appboot"
 			android:exported="false" />
 
 		<activity
-			android:name=".main.MainActivity"
+			android:name="yuku.kbbi.main.MainActivity"
 			android:theme="@style/AppTheme">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />

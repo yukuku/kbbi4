@@ -1,11 +1,11 @@
-package yuku.kbbi4.main;
+package yuku.kbbi.main;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import yuku.kbbi4.R;
+import yuku.kbbi.R;
 
 public class UnknownPage extends ContentPage {
 	@Nullable

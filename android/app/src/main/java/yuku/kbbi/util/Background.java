@@ -1,4 +1,4 @@
-package yuku.kbbi4.util;
+package yuku.kbbi.util;
 
 import android.support.annotation.NonNull;
 

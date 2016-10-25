@@ -1,4 +1,4 @@
-package yuku.kbbi4.main;
+package yuku.kbbi.main;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -24,19 +24,19 @@ import android.widget.TextView;
 import com.commonsware.cwac.pager.PageDescriptor;
 import com.commonsware.cwac.pager.SimplePageDescriptor;
 import com.commonsware.cwac.pager.v4.ArrayPagerAdapter;
-import yuku.kbbi4.App;
-import yuku.kbbi4.BaseActivity;
-import yuku.kbbi4.BuildConfig;
-import yuku.kbbi4.R;
-import yuku.kbbi4.dictdata.Acu;
-import yuku.kbbi4.util.Background;
-import yuku.kbbi4.util.Debouncer;
-import yuku.kbbi4.widget.SearchWrapper;
+import yuku.kbbi.App;
+import yuku.kbbi.BaseActivity;
+import yuku.kbbi.BuildConfig;
+import yuku.kbbi.R;
+import yuku.kbbi.dictdata.Acu;
+import yuku.kbbi.util.Background;
+import yuku.kbbi.util.Debouncer;
+import yuku.kbbi.widget.SearchWrapper;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static yuku.kbbi4.util.Views.*;
+import static yuku.kbbi.util.Views.*;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 

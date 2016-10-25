@@ -1,4 +1,4 @@
-package yuku.kbbi4.dictdata
+package yuku.kbbi.dictdata
 
 import android.graphics.Color
 import android.graphics.Typeface
@@ -7,10 +7,10 @@ import android.text.SpannableStringBuilder
 import android.text.TextPaint
 import android.text.style.*
 import android.view.View
-import yuku.kbbi4.App
-import yuku.kbbi4.R
-import yuku.kbbi4.dastruk.Cav
-import yuku.kbbi4.dastruk.ValueReader
+import yuku.kbbi.App
+import yuku.kbbi.R
+import yuku.kbbi.dastruk.Cav
+import yuku.kbbi.dastruk.ValueReader
 import java.io.BufferedInputStream
 
 class Renderer(val file_no: Int, val offset: Int, val acu_click: (Int) -> Unit) {

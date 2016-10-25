@@ -1,4 +1,4 @@
-package yuku.kbbi4.widget;
+package yuku.kbbi.widget;
 
 import android.text.Editable;
 import android.text.TextWatcher;

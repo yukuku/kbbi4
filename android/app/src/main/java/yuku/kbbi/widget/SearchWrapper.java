@@ -1,4 +1,4 @@
-package yuku.kbbi4.widget;
+package yuku.kbbi.widget;
 
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
@@ -7,13 +7,13 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import yuku.kbbi4.BaseActivity;
-import yuku.kbbi4.R;
+import yuku.kbbi.BaseActivity;
+import yuku.kbbi.R;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
-import static yuku.kbbi4.util.Views.Find;
-import static yuku.kbbi4.util.Views.gonify;
+import static yuku.kbbi.util.Views.Find;
+import static yuku.kbbi.util.Views.gonify;
 
 public class SearchWrapper {
 	public abstract static class OnQueryTextListener {

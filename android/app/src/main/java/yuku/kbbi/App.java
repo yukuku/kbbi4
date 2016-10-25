@@ -1,4 +1,4 @@
-package yuku.kbbi4;
+package yuku.kbbi;
 
 import android.app.Application;
 import android.content.Context;
