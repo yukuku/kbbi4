@@ -2,16 +2,22 @@ package yuku.kbbi4.dictdata
 
 import android.graphics.Color
 import android.graphics.Typeface
+import android.support.v4.content.res.ResourcesCompat
 import android.text.SpannableStringBuilder
 import android.text.TextPaint
 import android.text.style.*
 import android.view.View
 import yuku.kbbi4.App
+import yuku.kbbi4.R
 import yuku.kbbi4.dastruk.Cav
 import yuku.kbbi4.dastruk.ValueReader
 import java.io.BufferedInputStream
 
 class Renderer(val file_no: Int, val offset: Int, val acu_click: (Int) -> Unit) {
+    val linkColor by lazy {
+        ResourcesCompat.getColor(App.context.resources, R.color.colorPrimary, null)
+    }
+
     fun render(): SpannableStringBuilder {
         val vr = ValueReader(BufferedInputStream(App.context.assets.open("dictdata/acu_desc_$file_no.txt")))
         vr.skip(offset)
@@ -57,7 +63,7 @@ class Renderer(val file_no: Int, val offset: Int, val acu_click: (Int) -> Unit) 
                 20, 21, 22, 23, 24, 25 -> run {
                     val len = res.length
                     res.append(cav.string)
-                    res.setSpan(ForegroundColorSpan(Color.BLUE), len, res.length, 0)
+                    res.setSpan(ForegroundColorSpan(Color.RED), len, res.length, 0)
                 }
                 30, 31, 32 -> run {
                     val len = res.length
@@ -68,13 +74,13 @@ class Renderer(val file_no: Int, val offset: Int, val acu_click: (Int) -> Unit) 
                         32 -> res.append("akr")
                     }
 
-                    res.setSpan(ForegroundColorSpan(Color.GREEN), len, res.length, 0)
+                    res.setSpan(ForegroundColorSpan(0xff006600.toInt()), len, res.length, 0)
                 }
                 40, 41 -> run {
                     val len = res.length
                     val acu_id = cav.number
                     res.append(Acu.getAcu(acu_id))
-                    res.setSpan(ForegroundColorSpan(Color.RED), len, res.length, 0)
+                    res.setSpan(ForegroundColorSpan(linkColor), len, res.length, 0)
                     res.setSpan(object : ClickableSpan() {
                         override fun onClick(widget: View) {
                             acu_click(acu_id)
@@ -86,7 +92,7 @@ class Renderer(val file_no: Int, val offset: Int, val acu_click: (Int) -> Unit) 
                     }, len, res.length, 0)
 
                     if (cav.code == 41) {
-                        res.append(" >> ")
+                        res.append(" » ")
                     }
                 }
                 42 -> run {
@@ -97,7 +103,7 @@ class Renderer(val file_no: Int, val offset: Int, val acu_click: (Int) -> Unit) 
                 50 -> run {
                     val len = res.length
                     res.append(cav.string)
-                    res.setSpan(ForegroundColorSpan(Color.GRAY), len, res.length, 0)
+                    res.setSpan(ForegroundColorSpan(0xff666666.toInt()), len, res.length, 0)
                 }
                 60, 61, 62, 63 -> run {
                     val len = res.length
