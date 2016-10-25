@@ -1,11 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="match_parent"
-	android:layout_height="match_parent"
-	android:orientation="vertical">
+	android:layout_height="match_parent">
 
-	<TextView
+	<LinearLayout
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:text="Dashboard\n\nHalaman depan belum jadi, pakailah menu di kiri atau search di atas" />
-</LinearLayout>
+		android:orientation="vertical">
+
+		<TextView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="16dp"
+			android:text="KBBI V"
+			android:textAlignment="center"
+			android:textAppearance="@style/TextAppearance.AppCompat.Title"
+			android:textSize="28sp" />
+
+		<TextView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="8dp"
+			android:text="Kamus Besar Bahasa Indonesia Edisi ke-5"
+			android:textAlignment="center"
+			android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+
+		<TextView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="32dp"
+			android:text="Aplikasi luring resmi"
+			android:textAlignment="center"
+			android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
+
+		<ImageView
+			android:layout_width="match_parent"
+			android:layout_height="1dp"
+			android:layout_marginTop="16dp"
+			android:contentDescription="@null"
+			android:src="#ccc" />
+
+		<TextView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="32dp"
+			android:layout_marginRight="32dp"
+			android:layout_marginTop="32dp"
+			android:text="@string/dashboard_help" />
+
+		<LinearLayout
+			android:id="@+id/panelFacets"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="24dp"
+			android:layout_marginRight="24dp"
+			android:layout_marginTop="32dp"
+			android:layout_marginBottom="32dp"
+			android:orientation="vertical" />
+
+	</LinearLayout>
+</ScrollView>

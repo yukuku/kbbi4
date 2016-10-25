@@ -34,15 +34,20 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
     compile "com.android.support:appcompat-v7:$supportLibraryVersion"
     compile "com.android.support:recyclerview-v7:$supportLibraryVersion"
-    compile 'com.carrotsearch:hppc:0.7.1'
     compile "com.android.support:design:$supportLibraryVersion"
+    compile "com.android.support:cardview-v7:$supportLibraryVersion"
+
+    compile 'com.carrotsearch:hppc:0.7.1'
     compile 'com.commonsware.cwac:pager:0.2.5'
+    compile 'com.simplecityapps:recyclerview-fastscroll:1.0.11'
+
     compile "com.f2prateek.dart:dart:$dartVersion"
     provided "com.f2prateek.dart:dart-processor:$dartVersion"
     compile "com.f2prateek.dart:henson:$dartVersion"
     apt "com.f2prateek.dart:henson-processor:$dartVersion"
-    compile 'com.simplecityapps:recyclerview-fastscroll:1.0.11'
+
     testCompile 'junit:junit:4.12'
 }
