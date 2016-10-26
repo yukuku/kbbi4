@@ -340,6 +340,28 @@ CODE_ITALIC = 61  # text
 CODE_SUB = 62  # text
 CODE_SUP = 63  # text
 
+# Hardcoded things (akan disyuh di masa depan)
+HARDCODED_NO_CACINGIN = frozenset({
+    "aspirat",
+    "cadel",
+    "ciri pembeda",
+    "diafon",
+    "labial",
+    "labiovelar",
+    "likuida",
+    "notasi fonetis",
+    "pelah",
+    "semivokal",
+    "bersuara",
+    "uvular",
+    "varian",
+    "vibran",
+    "vokal bawah", "vokal belakang", "vokal depan", "vokal hampar", "vokal tegang",
+    "distribusi komplementer", "lenis",
+})
+
+HARDCODED_NO_CACINGIN_PASSED = set()  # modifyable
+
 
 def kenali_tag(d: Descml, s: str, tags: list, codes: list):
     pos = 0
@@ -477,6 +499,10 @@ def render_acu(acu):
             if not still_empty: d.text(' ')
 
             def cacingin(s, e_nilai, e_jenis):
+                if e_nilai in HARDCODED_NO_CACINGIN:
+                    HARDCODED_NO_CACINGIN_PASSED.add(e_nilai)
+                    return s
+
                 entri_nonum = re.sub(r' \(\d+\)', '', e_nilai)
                 diganti = '[' + entri_nonum + ']'
 
@@ -579,6 +605,9 @@ def main():
 
     if fo is not None:
         fo.close()
+
+    for e_nilai in HARDCODED_NO_CACINGIN - HARDCODED_NO_CACINGIN_PASSED:
+        logging.warning('HARDCODED_NO_CACINGIN not used: {}'.format(e_nilai))
 
     with open('{}/acu_nilai.txt'.format(base_out_dir), 'wb') as fo:
         # length first
