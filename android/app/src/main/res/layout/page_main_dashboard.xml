@@ -23,7 +23,9 @@
 			android:layout_marginTop="8dp"
 			android:text="Kamus Besar Bahasa Indonesia Edisi ke-5"
 			android:textAlignment="center"
-			android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+			android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+			android:paddingEnd="16dp"
+			android:paddingStart="16dp" />
 
 		<TextView
 			android:layout_width="match_parent"
