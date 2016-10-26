@@ -15,7 +15,7 @@
 				<item
 					android:id="@+id/menuKelas"
 					android:icon="@drawable/ic_label_black_24dp"
-					android:title="Kelas" />
+					android:title="Kelas kata" />
 				<item
 					android:id="@+id/menuRagam"
 					android:icon="@drawable/ic_label_black_24dp"

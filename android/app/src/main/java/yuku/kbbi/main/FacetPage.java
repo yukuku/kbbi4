@@ -23,6 +23,9 @@ public class FacetPage extends ContentPage {
 	@InjectExtra
 	String facet;
 
+	@InjectExtra
+	String judul;
+
 	TextView tFacet;
 	RecyclerView lsKategoris;
 
@@ -47,7 +50,7 @@ public class FacetPage extends ContentPage {
 	public void onViewCreated(final View view, @Nullable final Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 
-		tFacet.setText(facet);
+		tFacet.setText(judul);
 		lsKategoris.setLayoutManager(new LinearLayoutManager(getActivity()));
 		lsKategoris.setAdapter(kategorisAdapter = new KategorisAdapter());
 		kategorisAdapter.setData(KategoriRepo.INSTANCE.listKategoris(facet));

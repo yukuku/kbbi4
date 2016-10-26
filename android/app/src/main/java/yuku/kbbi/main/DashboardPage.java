@@ -53,7 +53,7 @@ public class DashboardPage extends ContentPage {
 			tFacetTitle.setText(title);
 			tFacetDesc.setText(desc);
 
-			cell.setOnClickListener(v -> MainActivity.requestFacetPage(name));
+			cell.setOnClickListener(v -> MainActivity.requestFacetPage(name, title));
 		}
 	}
 }

@@ -125,7 +125,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 				}
 				case "facet": {
 					final String facet = intent.getStringExtra("facet");
-					pd = new SimplePageDescriptor("facet:" + facet + ":" + Math.random(), "Facet " + facet);
+					final String judul = intent.getStringExtra("judul");
+					pd = new SimplePageDescriptor("facet:" + facet + ":" + judul + ":" + Math.random(), "Facet " + judul);
 					break;
 				}
 				case "kategori": {
@@ -156,10 +157,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 		);
 	}
 
-	public static void requestFacetPage(final String facet) {
+	public static void requestFacetPage(final String facet, final String judul) {
 		App.lbm().sendBroadcast(new Intent(ACTION_REQUEST_NEW_PAGE)
 			.putExtra("kind", "facet")
 			.putExtra("facet", facet)
+			.putExtra("judul", judul)
 		);
 	}
 
@@ -326,19 +328,19 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
 		switch (itemId) {
 			case R.id.menuBahasa:
-				requestFacetPage("bahasa");
+				requestFacetPage("bahasa", "Bahasa");
 				break;
 			case R.id.menuBidang:
-				requestFacetPage("bidang");
+				requestFacetPage("bidang", "Bidang");
 				break;
 			case R.id.menuKelas:
-				requestFacetPage("kelas");
+				requestFacetPage("kelas", "Kelas kata");
 				break;
 			case R.id.menuRagam:
-				requestFacetPage("ragam");
+				requestFacetPage("ragam", "Ragam");
 				break;
 			case R.id.menuJenis:
-				requestFacetPage("jenis");
+				requestFacetPage("jenis", "Jenis");
 				break;
 			case R.id.menuAbout:
 				new AlertDialog.Builder(this)
@@ -379,6 +381,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 				case "facet": {
 					final Intent intent = Henson.with(MainActivity.this).gotoFacetPage()
 						.facet(args[1])
+						.judul(args[2])
 						.build();
 					final FacetPage page = new FacetPage();
 					page.setArguments(intent.getExtras());
