@@ -3,4 +3,15 @@
 	<color name="colorPrimary">#303f9f</color>
 	<color name="colorPrimaryDark">#1a237e</color>
 	<color name="colorAccent">#fbc02d</color>
+
+	<color name="renderer_KELAS">#f44336</color>
+	<color name="renderer_BAHASA">#f57f17</color>
+	<color name="renderer_BIDANG">#cddc39</color>
+	<color name="renderer_ILMIAH">#689f38</color>
+	<color name="renderer_KIMIA">#2e7d32</color>
+	<color name="renderer_RAGAM">#3949ab</color>
+	<color name="renderer_ki">#9c27b0</color>
+	<color name="renderer_kp">#9c27b0</color>
+	<color name="renderer_akr">#9c27b0</color>
+	<color name="renderer_ukp">#616161</color>
 </resources>

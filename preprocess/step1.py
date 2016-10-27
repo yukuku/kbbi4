@@ -331,6 +331,7 @@ CODE_RAGAM = 25  # text
 CODE_ki = 30  # null
 CODE_kp = 31  # null
 CODE_akr = 32  # null
+CODE_ukp = 33  # null
 CODE_LINK_ACU = 40  # int
 CODE_LINK_INDUK = 41  # int
 CODE_LINK_NOT_FOUND = 42  # text
@@ -425,6 +426,10 @@ def render_acu(acu):
         if entri.entri_var:
             d.text(' ')
             d.esc_text(CODE_ENTRI_VAR, entri.entri_var)
+
+        if entri.jenis == 'ukp':
+            d.text(' ')
+            d.esc_null(CODE_ukp)
 
         d.text('\n')
 
