@@ -8,6 +8,13 @@
 		android:layout_height="wrap_content"
 		android:orientation="vertical">
 
+		<ImageView
+			android:layout_width="48dp"
+			android:layout_height="48dp"
+			android:layout_gravity="center_horizontal"
+			android:layout_marginTop="16dp"
+			android:src="@drawable/logotutwurihandayanicolor11" />
+
 		<TextView
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
@@ -21,17 +28,21 @@
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:layout_marginTop="8dp"
-			android:text="Kamus Besar Bahasa Indonesia Edisi ke-5"
-			android:textAlignment="center"
-			android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+			android:fontFamily="sans-serif-condensed"
 			android:paddingEnd="16dp"
-			android:paddingStart="16dp" />
+			android:paddingStart="16dp"
+			android:text="Kamus Besar Bahasa Indonesia Edisi Kelima"
+			android:textAlignment="center"
+			android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
 
 		<TextView
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:layout_marginTop="32dp"
-			android:text="Aplikasi luring resmi"
+			android:layout_marginTop="16dp"
+			android:fontFamily="sans-serif-condensed"
+			android:paddingEnd="32dp"
+			android:paddingStart="32dp"
+			android:text="Aplikasi luring resmi Badan Pengembangan dan Pembinaan Bahasa, Kementerian Pendidikan dan Kebudayaan Republik Indonesia"
 			android:textAlignment="center"
 			android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
 
@@ -45,19 +56,20 @@
 		<TextView
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:layout_marginLeft="32dp"
-			android:layout_marginRight="32dp"
 			android:layout_marginTop="32dp"
-			android:text="@string/dashboard_help" />
+			android:paddingEnd="32dp"
+			android:paddingStart="32dp"
+			android:text="@string/dashboard_help"
+			android:textAlignment="center" />
 
 		<LinearLayout
 			android:id="@+id/panelFacets"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
+			android:layout_marginBottom="32dp"
 			android:layout_marginLeft="24dp"
 			android:layout_marginRight="24dp"
 			android:layout_marginTop="32dp"
-			android:layout_marginBottom="32dp"
 			android:orientation="vertical" />
 
 	</LinearLayout>
