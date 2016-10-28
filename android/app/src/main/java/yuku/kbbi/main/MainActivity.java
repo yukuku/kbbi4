@@ -344,7 +344,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 				break;
 			case R.id.menuAbout:
 				new AlertDialog.Builder(this)
-					.setMessage(getString(R.string.app_name) + " " + BuildConfig.VERSION_NAME + " (" + BuildConfig.VERSION_CODE + ")\n\nPusat Bahasa\n\nPengembang Aplikasi:\n\n– David Moeljadi\n– Randy Sugianto (Yuku)\n– Jaya Satrio Hendrick")
+					.setMessage(getString(R.string.app_name) + " " + BuildConfig.VERSION_NAME + " (" + BuildConfig.VERSION_CODE + ")\n\n" +
+						"Badan Pengembangan dan Pembinaan Bahasa, Kementerian Pendidikan dan Kebudayaan Republik Indonesia\n\n" +
+						"Pengembang Aplikasi:\n\n– David Moeljadi\n– Randy Sugianto (Yuku)\n– Jaya Satrio Hendrick"
+					)
 					.setPositiveButton("OK", null)
 					.show();
 				break;
