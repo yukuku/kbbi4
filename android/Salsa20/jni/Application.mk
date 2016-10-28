@@ -1,0 +1,5 @@
+# Build all
+APP_ABI := all
+
+APP_PLATFORM=android-7
+NDK_TOOLCHAIN_VERSION=4.4.3
