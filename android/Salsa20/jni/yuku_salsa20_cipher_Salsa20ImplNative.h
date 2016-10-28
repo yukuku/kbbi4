@@ -25,6 +25,7 @@ static inline u32 rol32(u32 word, unsigned int shift) {
 //////////////////////////////////
 
 class Salsa20ImplNative {
+	static u32 sigma[4];
 	static u32 tau[4];
 
 	// encryption states
@@ -40,7 +41,7 @@ class Salsa20ImplNative {
 	int posRemainder; // 0..63
 
 public:
-	Salsa20ImplNative(u8 *key, u8 *nonce, int rounds);
+	Salsa20ImplNative(u8 *key, int kbits, u8 *nonce, int rounds);
 	void setPosition(u64 pos);
 	u64 getPosition();
 	void crypt(u8 *in, int inOffset, u8 *out, int outOffset, int len);

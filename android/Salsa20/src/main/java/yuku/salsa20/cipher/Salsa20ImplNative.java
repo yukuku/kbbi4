@@ -14,8 +14,8 @@ class Salsa20ImplNative implements Salsa20 {
 	 * @param rounds Must be even. 20 is the full Salsa20 with 20 rounds (or 10 double-rounds) 
 	 */
 	public Salsa20ImplNative(byte[] key, byte[] nonce, int rounds) {
-		if (key == null || key.length != 16) {
-			throw new IllegalArgumentException("key is not 16 bytes");
+		if (key == null || (key.length != 16 && key.length != 32)) {
+			throw new IllegalArgumentException("key is not 16 bytes or 32 bytes");
 		}
 		if (nonce == null || nonce.length != 8) {
 			throw new IllegalArgumentException("nonce is not 8 bytes");

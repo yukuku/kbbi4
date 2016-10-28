@@ -1,10 +1,14 @@
 package yuku.salsa20.cipher;
 
 class Salsa20ImplJava implements Salsa20 {
+	private final static int[] sigma = {
+		0x61707865, 0x3320646e, 0x79622d32, 0x6b206574,
+	};
+	
 	private final static int[] tau = {
 		0x61707865, 0x3120646e, 0x79622d36, 0x6b206574,
 	};
-	
+
 	// encryption states
 	final int[] input = new int[16];
 	final byte[] output = new byte[64];
@@ -29,13 +33,13 @@ class Salsa20ImplJava implements Salsa20 {
 	}
 	
 	/**
-	 * @param key 16 byte (128 bit)
+	 * @param key 16 byte (128 bit) or 32 byte (256 bit)
 	 * @param nonce 8 byte (64 bit)
 	 * @param rounds Must be even. 20 is the full Salsa20 with 20 rounds (or 10 double-rounds) 
 	 */
 	public Salsa20ImplJava(byte[] key, byte[] nonce, int rounds) {
-		if (key == null || key.length != 16) {
-			throw new IllegalArgumentException("key is not 16 bytes");
+		if (key == null || (key.length != 16 && key.length != 32)) {
+			throw new IllegalArgumentException("key is not 16 bytes or 32 bytes");
 		}
 		if (nonce == null || nonce.length != 8) {
 			throw new IllegalArgumentException("nonce is not 8 bytes");
@@ -131,17 +135,21 @@ class Salsa20ImplJava implements Salsa20 {
 		this.input[3] = readInt32LE(key, 8);
 		this.input[4] = readInt32LE(key, 12);
 
-		if (key.length == 16) { // only 128 bit key supported here
+		int addkey = 0;
+		if (key.length == 32) { /* recommended */
+			addkey += 16;
+			constants = sigma;
+		} else if (key.length == 16) {
 			constants = tau; 
 		} else {
-			throw new RuntimeException("key not 128 bit");
+			throw new RuntimeException("key not 128 bit or 256 bit");
 		}
 
 		// setup from key
-		this.input[11] = readInt32LE(key, 0);
-		this.input[12] = readInt32LE(key, 4);
-		this.input[13] = readInt32LE(key, 8);
-		this.input[14] = readInt32LE(key, 12);
+		this.input[11] = readInt32LE(key, addkey);
+		this.input[12] = readInt32LE(key, addkey + 4);
+		this.input[13] = readInt32LE(key, addkey + 8);
+		this.input[14] = readInt32LE(key, addkey + 12);
 
 		// setup from constants
 		this.input[0] = constants[0];

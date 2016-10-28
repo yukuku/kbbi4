@@ -7,11 +7,15 @@
 #include "yuku_salsa20_cipher_Salsa20ImplNative.h"
 #include <android/log.h>
 
+u32 Salsa20ImplNative::sigma[] = {
+	0x61707865, 0x3320646e, 0x79622d32, 0x6b206574,
+};
+
 u32 Salsa20ImplNative::tau[] = {
 	0x61707865, 0x3120646e, 0x79622d36, 0x6b206574,
 };
 
-Salsa20ImplNative::Salsa20ImplNative(u8 *key, u8 *nonce, int rounds) {
+Salsa20ImplNative::Salsa20ImplNative(u8 *key, int kbits, u8 *nonce, int rounds) {
 	this->posBlock = 0;
 	this->posRemainder = 0;
 	this->doubleRounds = rounds >> 1;
@@ -26,8 +30,12 @@ Salsa20ImplNative::Salsa20ImplNative(u8 *key, u8 *nonce, int rounds) {
 	input[3] = U8TO32_LITTLE(key + 8);
 	input[4] = U8TO32_LITTLE(key + 12);
 
-	// only 128 bit key supported here
-	constants = tau;
+	if (kbits == 256) { /* recommended */
+		key += 16;
+		constants = sigma;
+	} else { /* kbits == 128 */
+		constants = tau;
+	}
 
 	// setup from key
 	input[11] = U8TO32_LITTLE(key + 0);
@@ -179,7 +187,9 @@ extern "C" {
 		jbyte *key = env->GetByteArrayElements(_key, NULL);
 		jbyte *nonce = env->GetByteArrayElements(_nonce, NULL);
 
-		Salsa20ImplNative *s = new Salsa20ImplNative((u8*)key, (u8*)nonce, rounds);
+		int kbits = 8 * env->GetArrayLength(_key);
+
+		Salsa20ImplNative *s = new Salsa20ImplNative((u8*)key, kbits, (u8*)nonce, rounds);
 
 		env->ReleaseByteArrayElements(_nonce, nonce, JNI_ABORT);
 		env->ReleaseByteArrayElements(_key, key, JNI_ABORT);
