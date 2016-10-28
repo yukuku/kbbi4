@@ -2,6 +2,9 @@ import logging
 import os
 import re
 import sqlite3
+import subprocess
+
+import sys
 
 
 class Entri:
@@ -590,9 +593,12 @@ def main():
 
     file_no = 0
     fo = None
+    to_encrypt_fns = []
     for acu in all_acus:
         if fo is None:
-            fo = open('{}/acu_desc_{}.txt'.format(base_out_dir, file_no), 'wb')
+            fn = '{}/acu_desc_{}'.format(base_out_dir, file_no)
+            to_encrypt_fns.append(fn)
+            fo = open(fn + '.txt', 'wb')
 
         b = render_acu(acu)
         off = fo.tell()
@@ -607,6 +613,12 @@ def main():
             fo.close()
             fo = None
             file_no += 1
+
+    for to_encrypt_fn in to_encrypt_fns:
+        subprocess.call(['zopfli', to_encrypt_fn + '.txt'])
+        subprocess.call(['salsa20', '-p', to_encrypt_fn + '.txt.gz', to_encrypt_fn + '.s', os.environ['ENC_KEY_FULL32BYTE'] + os.environ['ENC_KEY_IV']])
+        os.unlink(to_encrypt_fn + '.txt.gz')
+        os.unlink(to_encrypt_fn + '.txt')
 
     if fo is not None:
         fo.close()

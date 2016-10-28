@@ -14,6 +14,8 @@ android {
         versionName "0.0.8"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         resConfigs 'en'
+        buildConfigField "String", "ENC_KEY_1", "\"" + System.getenv("ENC_KEY_1") + "\""
+        buildConfigField "String", "ENC_KEY_IV", "\"" + System.getenv("ENC_KEY_IV") + "\""
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
