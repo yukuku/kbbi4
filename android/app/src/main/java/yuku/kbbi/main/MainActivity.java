@@ -347,7 +347,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 					.setMessage(getString(R.string.app_name) + " " + BuildConfig.VERSION_NAME + " (" + BuildConfig.VERSION_CODE + ")\n\n" +
 						"(C) 2016 Badan Pengembangan dan Pembinaan Bahasa, Kementerian Pendidikan dan Kebudayaan Republik Indonesia\n\n" +
 						"Untuk informasi lebih lanjut, silakan mengunjungi KBBI V Daring kbbi.kemdikbud.go.id atau menghubungi kami melalui posel badan.bahasa@kemdikbud.go.id\n\n" +
-						"Pengembang aplikasi:\n\n– David Moeljadi\n– Randy Sugianto (Yuku)\n– Jaya Satrio Hendrick"
+						"Pengembang aplikasi:\n\n– David Moeljadi\n– Randy Sugianto (Yuku)\n– Jaya Satrio Hendrick\n– Kenny Hartono"
 					)
 					.setPositiveButton("OK", null)
 					.show();
