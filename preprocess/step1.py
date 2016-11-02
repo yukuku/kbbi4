@@ -446,8 +446,11 @@ def render_acu(acu):
         d.text('\n')
 
         if entri.jenis_rujuk:
-            d.text(entri.jenis_rujuk)
-            d.text(' ')
+            if entri.jenis_rujuk == '→':
+                d.text('bentuk tidak baku dari ')
+            else:
+                d.text(entri.jenis_rujuk + ' ')
+
             if entri.acu_rujuks:
                 fst_acu_rujuk = True
                 for acu_rujuk in entri.acu_rujuks:

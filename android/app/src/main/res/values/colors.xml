@@ -6,7 +6,7 @@
 
 	<color name="renderer_KELAS">#f44336</color>
 	<color name="renderer_BAHASA">#f57f17</color>
-	<color name="renderer_BIDANG">#cddc39</color>
+	<color name="renderer_BIDANG">#afb42b</color>
 	<color name="renderer_ILMIAH">#689f38</color>
 	<color name="renderer_KIMIA">#2e7d32</color>
 	<color name="renderer_RAGAM">#3949ab</color>
