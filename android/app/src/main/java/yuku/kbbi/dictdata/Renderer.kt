@@ -82,11 +82,16 @@ class Renderer(val file_no: Int, val offset: Int, val acu_click: (Int) -> Unit, 
 
                 when (cav.code) {
                     0 -> res.append(cav.string)
-                    1, 3 -> run {
+                    1, 3, 5 -> run {
                         val len = res.length
                         res.append(cav.string)
-                        res.setSpan(StyleSpan(Typeface.BOLD), len, res.length, 0)
                         res.setSpan(RelativeSizeSpan(1.4f), len, res.length, 0)
+
+                        if (cav.code == 5) {
+                            res.setSpan(StyleSpan(Typeface.BOLD_ITALIC), len, res.length, 0)
+                        } else {
+                            res.setSpan(StyleSpan(Typeface.BOLD), len, res.length, 0)
+                        }
                     }
                     2 -> res.append("/${cav.string}/")
                     4 -> run {

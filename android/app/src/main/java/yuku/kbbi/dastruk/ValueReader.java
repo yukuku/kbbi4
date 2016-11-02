@@ -91,6 +91,7 @@ public class ValueReader implements Closeable {
 		codeArg[2] = ARG_text;
 		codeArg[3] = ARG_text;
 		codeArg[4] = ARG_text;
+		codeArg[5] = ARG_text;
 		codeArg[10] = ARG_null;
 		codeArg[11] = ARG_null;
 		codeArg[12] = ARG_null;

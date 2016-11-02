@@ -319,6 +319,7 @@ CODE_ENTRI = 1  # text
 CODE_LAFAL = 2  # text
 CODE_SILABEL = 3  # text
 CODE_ENTRI_VAR = 4  # text
+CODE_UNGKAPAN = 5  # text
 CODE_ANAK_varian = 10  # null
 CODE_ANAK_dasar = 11  # null
 CODE_ANAK_gabungan = 12  # null
@@ -422,6 +423,9 @@ def render_acu(acu):
         if entri.induk:
             d.esc_uint(CODE_LINK_INDUK, entri.induk.acu.aid)
 
+        if entri.jenis == 'ukp':
+            d.esc_text(CODE_UNGKAPAN, entri.nilai)
+        else:
         if entri.silabel:
             d.esc_text(CODE_SILABEL, entri.silabel)
         else:
