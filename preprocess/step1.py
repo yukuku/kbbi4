@@ -801,11 +801,3 @@ def cari_peribahasa():
 
 main()
 # cari_peribahasa()
-
-# bedakan anaks berdasarkan 'jenis' OK
-
-# entri_var tampilkan begini: berambin (_atau_ berambin lutut) DI CLIENT
-
-# parse <i>
-
-# parse <sub> di kimia
