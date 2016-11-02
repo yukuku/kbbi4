@@ -111,6 +111,43 @@ for row in conn.execute('select distinct mid from Contoh where aktif=1').fetchal
 
 print('mids_with_contoh count:', len(mids_with_contoh))
 
+# Singkatan dalam makna atau contoh
+INLINE_SINGKATAN = {
+    'akr': 'akronim',
+    'dl': 'dalam',
+    'dll': 'dan lain-lain',
+    'dng': 'dengan',
+    'dp': 'daripada',
+    'dr': 'dari',
+    'dsb': 'dan sebagainya',
+    'dst': 'dan seterusnya',
+    'ki': 'kias',
+    'kp': 'kependekan',
+    'kpd': 'kepada',
+    'krn': 'karena',
+    'msl': 'misalnya',
+    'pb': 'peribahasa',
+    'pd': 'pada',
+    'sbg': 'sebagai',
+    'spt': 'seperti',
+    'thd': 'terhadap',
+    'tsb': 'tersebut',
+    'tt': 'tentang',
+    'yg': 'yang',
+}
+
+# compile regex to optimize
+_inline_singkatan = [
+    (k, re.compile(r'\b{}\b'.format(k)), v)
+    for k, v in INLINE_SINGKATAN.items()
+]
+
+def expand_inline_singkatan(s):
+    for _is in _inline_singkatan:
+        if _is[0] in s:
+            s = re.sub(_is[1], _is[2], s)
+    return s
+
 for row in conn.execute('select eid, entri, jenis_rujuk, entri_rujuk, induk, silabel, jenis, entri_var, lafal from Entri where aktif=1').fetchall():
     e = Entri()
     e.eid = row[0]
@@ -120,7 +157,7 @@ for row in conn.execute('select eid, entri, jenis_rujuk, entri_rujuk, induk, sil
     for rowm in conn.execute('select mid, makna, kelas, bahasa, bidang, ilmiah, kimia, ki, kp, akr, ragam, ragam_var from Makna where eid=? and aktif=1', (e.eid,)).fetchall():
         m = Makna()
         m.mid = rowm[0]
-        m.nilai = rowm[1]
+        m.nilai = expand_inline_singkatan(rowm[1])
         m.kelas = rowm[2]
         m.bahasa = rowm[3]
         m.bidang = rowm[4]
@@ -138,7 +175,7 @@ for row in conn.execute('select eid, entri, jenis_rujuk, entri_rujuk, induk, sil
             for rowc in conn.execute('select cid, contoh from Contoh where mid=? and aktif=1', (m.mid,)).fetchall():
                 c = Contoh()
                 c.cid = rowc[0]
-                c.nilai = rowc[1]
+                c.nilai = expand_inline_singkatan(rowc[1])
                 m.contohs.append(c)
 
     # rujuk
@@ -397,8 +434,8 @@ def write_anaks(d: Descml, entri: Entri, allowed_anak, text_before: str):
         acus.sort(key=lambda acu: acu.nilai)
 
     for code, acus in by_code.items():
-            if text_before: d.text(text_before)
-            d.esc_null(code)
+        if text_before: d.text(text_before)
+        d.esc_null(code)
         for i, acu in enumerate(acus):
             if i != 0: d.text('; ')
             d.esc_uint(CODE_LINK_ACU, acu.aid)
@@ -426,10 +463,10 @@ def render_acu(acu):
         if entri.jenis == 'ukp':
             d.esc_text(CODE_UNGKAPAN, entri.nilai)
         else:
-        if entri.silabel:
-            d.esc_text(CODE_SILABEL, entri.silabel)
-        else:
-            d.esc_text(CODE_ENTRI, entri.nilai)
+            if entri.silabel:
+                d.esc_text(CODE_SILABEL, entri.silabel)
+            else:
+                d.esc_text(CODE_ENTRI, entri.nilai)
 
         if entri.lafal:
             d.text(' ')
@@ -645,6 +682,7 @@ def main():
 
     for to_encrypt_fn in to_encrypt_fns:
         subprocess.call(['zopfli', to_encrypt_fn + '.txt'])
+        # subprocess.call(['gzip', '-k', to_encrypt_fn + '.txt'])
         subprocess.call(['salsa20', '-p', to_encrypt_fn + '.txt.gz', to_encrypt_fn + '.s', os.environ['ENC_KEY_FULL32BYTE'] + os.environ['ENC_KEY_IV']])
         os.unlink(to_encrypt_fn + '.txt.gz')
         os.unlink(to_encrypt_fn + '.txt')
