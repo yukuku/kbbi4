@@ -15,7 +15,7 @@ import yuku.salsa20.cipher.Salsa20InputStream
 import java.util.*
 import java.util.zip.GZIPInputStream
 
-class Renderer(val file_no: Int, val offset: Int, val acu_click: (Int) -> Unit) {
+class Renderer(val file_no: Int, val offset: Int, val acu_click: (Int) -> Unit, val kategori_click: (String, String) -> Unit) {
     val linkColor by lazy {
         ResourcesCompat.getColor(App.context.resources, R.color.colorPrimary, null)
     }
@@ -101,7 +101,7 @@ class Renderer(val file_no: Int, val offset: Int, val acu_click: (Int) -> Unit) 
                             10 -> res.append("Varian")
                             11 -> res.append("Dasar")
                             12 -> res.append("Gabungan kata")
-                            13 -> res.append("Kata berimbuhan")
+                            13 -> res.append("Kata turunan")
                             14 -> res.append("Peribahasa")
                             15 -> res.append("Idiom")
                         }
@@ -111,8 +111,29 @@ class Renderer(val file_no: Int, val offset: Int, val acu_click: (Int) -> Unit) 
                     }
                     20, 21, 22, 23, 24, 25 -> run {
                         val len = res.length
-                        res.append(cav.string)
+                        val nilai = cav.string
+                        res.append(nilai)
                         res.setSpan(ForegroundColorSpan(colors_20s[cav.code - 20]), len, res.length, 0)
+
+                        val link_facet = when (cav.code) {
+                            20 -> "kelas"
+                            21 -> "bahasa"
+                            22 -> "bidang"
+                            25 -> "ragam"
+                            else -> null
+                        }
+
+                        if (link_facet != null) {
+                            res.setSpan(object : ClickableSpan() {
+                                override fun onClick(widget: View) {
+                                    kategori_click(link_facet, nilai)
+                                }
+
+                                override fun updateDrawState(ds: TextPaint) {
+                                    // nop
+                                }
+                            }, len, res.length, 0)
+                        }
                     }
                     74 -> run { // KIMIA + SUB
                         val len = res.length

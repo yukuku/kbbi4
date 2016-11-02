@@ -383,20 +383,24 @@ def kenali_tag(d: Descml, s: str, tags: list, codes: list):
 
 def write_anaks(d: Descml, entri: Entri, allowed_anak, text_before: str):
     has_written = False
-    code = 0
-    fst = True
+
+    by_code = {}
+
     for anak in sorted((anak for anak in entri.anaks if allowed_anak(anak)), key=lambda anak: anak.jenis):
-        has_written = True
         new_code = globals()['CODE_ANAK_{}'.format(anak.jenis)]
-        if new_code != code:
-            fst = True
-            code = new_code
+        per_code = by_code.get(new_code, [])
+        per_code.append(anak.acu)
+        by_code[new_code] = per_code
+
+    for acus in by_code.values():
+        acus.sort(key=lambda acu: acu.nilai)
+
+    for code, acus in by_code.items():
             if text_before: d.text(text_before)
             d.esc_null(code)
-        if not fst:
-            d.text('; ')
-        d.esc_uint(CODE_LINK_ACU, anak.acu.aid)
-        fst = False
+        for i, acu in enumerate(acus):
+            if i != 0: d.text('; ')
+            d.esc_uint(CODE_LINK_ACU, acu.aid)
 
     return has_written
 

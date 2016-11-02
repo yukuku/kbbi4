@@ -55,7 +55,7 @@ public class KategoriPage extends ContentPage {
 
 		kategori = KategoriRepo.INSTANCE.getKategori(facet, nilai);
 
-		tKategori.setText(kategori.desc + (kategori.nilai.equals(kategori.desc) ? "" : (" (" + kategori.nilai + ")")));
+		tKategori.setText(kategori.desc + (kategori.nilai.equals(kategori.desc) || "jenis".equals(facet) ? "" : (" (" + kategori.nilai + ")")));
 		lsAcus.setLayoutManager(new LinearLayoutManager(getActivity()));
 		lsAcus.setAdapter(acusAdapter = new AcusAdapter());
 

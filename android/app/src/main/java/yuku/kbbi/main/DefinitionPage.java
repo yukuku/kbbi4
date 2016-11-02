@@ -43,6 +43,9 @@ public class DefinitionPage extends ContentPage {
 		final Renderer renderer = Acu.INSTANCE.getRenderer(acu_id, link_acu_id -> {
 			MainActivity.requestDefinitionPage(link_acu_id);
 			return Unit.INSTANCE;
+		}, (facet, nilai) -> {
+			MainActivity.requestKategoriPage(facet, nilai);
+			return Unit.INSTANCE;
 		});
 
 		tDesc.setText(renderer.render());
