@@ -99,7 +99,7 @@ class Renderer(val file_no: Int, val offset: Int, val acu_click: (Int) -> Unit, 
                         res.append("(${cav.string})")
                         res.setSpan(StyleSpan(Typeface.BOLD), len, res.length, 0)
                     }
-                    10, 11, 12, 13, 14 -> run {
+                    10, 11, 12, 13, 14, 15 -> run {
                         val len = res.length
 
                         when (cav.code) {
