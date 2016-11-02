@@ -108,7 +108,7 @@ class Renderer(val file_no: Int, val offset: Int, val acu_click: (Int) -> Unit, 
                             12 -> res.append("Gabungan kata")
                             13 -> res.append("Kata turunan")
                             14 -> res.append("Peribahasa")
-                            15 -> res.append("Idiom")
+                            15 -> res.append("Kiasan")
                         }
 
                         res.setSpan(StyleSpan(Typeface.BOLD), len, res.length, 0)
