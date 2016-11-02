@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.text.util.LinkifyCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -16,6 +17,9 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableStringBuilder;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -343,14 +347,23 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 				requestFacetPage("jenis", "Jenis");
 				break;
 			case R.id.menuAbout:
-				new AlertDialog.Builder(this)
-					.setMessage(getString(R.string.app_name) + " " + BuildConfig.VERSION_NAME + " (" + BuildConfig.VERSION_CODE + ")\n\n" +
-						"(C) 2016 Badan Pengembangan dan Pembinaan Bahasa, Kementerian Pendidikan dan Kebudayaan Republik Indonesia\n\n" +
-						"Untuk informasi lebih lanjut, silakan mengunjungi KBBI V Daring kbbi.kemdikbud.go.id atau menghubungi kami melalui posel badan.bahasa@kemdikbud.go.id\n\n" +
-						"Pengembang aplikasi:\n\n– David Moeljadi\n– Randy Sugianto (Yuku)\n– Jaya Satrio Hendrick\n– Kenny Hartono"
-					)
+				final SpannableStringBuilder content = new SpannableStringBuilder(getString(R.string.app_name) + " " + BuildConfig.VERSION_NAME + " (" + BuildConfig.VERSION_CODE + ")\n\n" +
+					"© 2016 Badan Pengembangan dan Pembinaan Bahasa, Kementerian Pendidikan dan Kebudayaan Republik Indonesia\n\n" +
+					"Untuk informasi lebih lanjut, silakan mengunjungi KBBI V Daring kbbi.kemdikbud.go.id atau menghubungi kami melalui posel badan.bahasa@kemdikbud.go.id\n\n" +
+					"Pengembang aplikasi:\n– David Moeljadi\n– Randy Sugianto (Yuku)\n– Jaya Satrio Hendrick\n– Kenny Hartono");
+
+				LinkifyCompat.addLinks(content, Linkify.WEB_URLS | Linkify.EMAIL_ADDRESSES);
+
+				final AlertDialog dialog = new AlertDialog.Builder(this)
+					.setMessage(content)
 					.setPositiveButton("OK", null)
 					.show();
+
+				final TextView tv = (TextView) dialog.findViewById(android.R.id.message);
+				if (tv != null) {
+					tv.setMovementMethod(LinkMovementMethod.getInstance());
+				}
+
 				break;
 		}
 
