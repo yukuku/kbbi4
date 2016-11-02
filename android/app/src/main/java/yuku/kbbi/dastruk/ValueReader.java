@@ -115,6 +115,7 @@ public class ValueReader implements Closeable {
 		codeArg[61] = ARG_text;
 		codeArg[62] = ARG_text;
 		codeArg[63] = ARG_text;
+		codeArg[74] = ARG_text;
 		codeArg[0xff] = ARG_null; // EOF marker
 	}
 

@@ -114,6 +114,12 @@ class Renderer(val file_no: Int, val offset: Int, val acu_click: (Int) -> Unit) 
                         res.append(cav.string)
                         res.setSpan(ForegroundColorSpan(colors_20s[cav.code - 20]), len, res.length, 0)
                     }
+                    74 -> run { // KIMIA + SUB
+                        val len = res.length
+                        res.append(cav.string)
+                        res.setSpan(ForegroundColorSpan(colors_20s[cav.code - 70]), len, res.length, 0)
+                        res.setSpan(SubscriptSpan(), len, res.length, 0)
+                    }
                     30, 31, 32, 33 -> run {
                         val len = res.length
 

@@ -343,6 +343,7 @@ CODE_BOLD = 60  # text
 CODE_ITALIC = 61  # text
 CODE_SUB = 62  # text
 CODE_SUP = 63  # text
+CODE_KIMIA_SUB = 74  # text
 
 # Hardcoded things (akan disyuh di masa depan)
 HARDCODED_NO_CACINGIN = frozenset({
@@ -564,7 +565,24 @@ def render_acu(acu):
 
             if makna.kimia:
                 d.text('; ')
-                d.esc_text(CODE_KIMIA, makna.kimia)
+
+                def kimia_sub(s):
+                    start = 0
+                    while 1:
+                        pos = s.find('<sub>', start)
+                        if pos == -1:
+                            break
+
+                        pos2 = s.find('</sub>', pos)
+                        if pos2 == -1:
+                            break
+
+                        d.esc_text(CODE_KIMIA, s[start:pos])
+                        d.esc_text(CODE_KIMIA_SUB, s[pos+5:pos2])
+                        start = pos2 + 6
+                    d.esc_text(CODE_KIMIA, s[start:])
+
+                kimia_sub(makna.kimia)
 
             if makna.contohs:
                 d.text(': ')
