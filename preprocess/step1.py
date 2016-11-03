@@ -399,6 +399,7 @@ HARDCODED_NO_CACINGIN = frozenset({
     "uvular",
     "varian",
     "vibran",
+    "vokal", "vokal tinggi", "diakritik",
     "vokal bawah", "vokal belakang", "vokal depan", "vokal hampar", "vokal tegang",
     "distribusi komplementer", "lenis",
 })
