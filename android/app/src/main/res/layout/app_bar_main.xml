@@ -19,7 +19,8 @@
 			android:background="?attr/colorPrimary"
 			app:contentInsetStart="0dp"
 			app:contentInsetStartWithNavigation="0dp"
-			app:popupTheme="@style/AppTheme.PopupOverlay">
+			app:popupTheme="@style/AppTheme.PopupOverlay"
+			app:theme="@style/ToolbarTheme">
 
 			<LinearLayout
 				android:id="@+id/searchView"
@@ -48,8 +49,7 @@
 					android:layout_height="match_parent"
 					android:layout_gravity="center_vertical"
 					android:background="?selectableItemBackgroundBorderless"
-					android:src="@drawable/ic_close_black_24dp"
-					android:tint="#fff" />
+					android:src="@drawable/ic_close_gold_24dp" />
 			</LinearLayout>
 
 		</android.support.v7.widget.Toolbar>

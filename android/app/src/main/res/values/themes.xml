@@ -7,4 +7,8 @@
 		<item name="colorAccent">@color/colorAccent</item>
 	</style>
 
+	<style name="ToolbarTheme">
+		<item name="android:textColorPrimary">#f9ce1d</item>
+	</style>
+
 </resources>

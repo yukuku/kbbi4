@@ -64,7 +64,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
 		final Toolbar toolbar = find(R.id.toolbar);
 		setSupportActionBar(toolbar);
-		toolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp);
+		toolbar.setNavigationIcon(R.drawable.ic_menu_gold_24dp);
 		ab = getSupportActionBar();
 		assert ab != null;
 		ab.setHomeButtonEnabled(true);
