@@ -10,8 +10,8 @@ android {
         applicationId "yuku.kbbi5"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 11
-        versionName "0.1.1 Beta"
+        versionCode 12
+        versionName "0.1.2 Beta"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         resConfigs 'en'
         buildConfigField "String", "ENC_KEY_1", "\"" + System.getenv("ENC_KEY_1") + "\""
