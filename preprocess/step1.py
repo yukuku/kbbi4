@@ -402,6 +402,7 @@ HARDCODED_NO_CACINGIN = frozenset({
     "vokal", "vokal tinggi", "diakritik",
     "vokal bawah", "vokal belakang", "vokal depan", "vokal hampar", "vokal tegang",
     "distribusi komplementer", "lenis",
+    "kurung besar",
 })
 
 HARDCODED_NO_CACINGIN_PASSED = set()  # modifyable
