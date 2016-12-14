@@ -17,7 +17,9 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.view.Menu;
@@ -28,6 +30,7 @@ import android.widget.TextView;
 import com.commonsware.cwac.pager.PageDescriptor;
 import com.commonsware.cwac.pager.SimplePageDescriptor;
 import com.commonsware.cwac.pager.v4.ArrayPagerAdapter;
+import kotlin.io.TextStreamsKt;
 import yuku.kbbi.App;
 import yuku.kbbi.BaseActivity;
 import yuku.kbbi.BuildConfig;
@@ -35,8 +38,11 @@ import yuku.kbbi.R;
 import yuku.kbbi.dictdata.Acu;
 import yuku.kbbi.util.Background;
 import yuku.kbbi.util.Debouncer;
+import yuku.kbbi.util.Exceptions;
 import yuku.kbbi.widget.SearchWrapper;
 
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -357,6 +363,15 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 				final AlertDialog dialog = new AlertDialog.Builder(this)
 					.setMessage(content)
 					.setPositiveButton("OK", null)
+					.setNeutralButton("Tim Penyusun", (dialog1, which) -> Background.run(() -> {
+						//noinspection deprecation
+						final Spanned text = Html.fromHtml(Exceptions.mustNotFail(() -> TextStreamsKt.readText(new InputStreamReader(getAssets().open("about/penyusun.html"), Charset.forName("utf-8")))));
+						runOnUiThread(() -> new AlertDialog.Builder(this)
+							.setMessage(text)
+							.setPositiveButton("OK", null)
+							.show()
+						);
+					}))
 					.show();
 
 				final TextView tv = (TextView) dialog.findViewById(android.R.id.message);

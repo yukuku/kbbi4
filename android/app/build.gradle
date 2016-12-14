@@ -10,8 +10,8 @@ android {
         applicationId "yuku.kbbi5"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 14
-        versionName "0.1.4 Beta"
+        versionCode 15
+        versionName "0.1.5 Beta"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         resConfigs 'en'
 
