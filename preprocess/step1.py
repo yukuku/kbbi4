@@ -591,7 +591,7 @@ def render_acu(acu):
                         logging.warning('{}: no closing bracket: {}'.format(e_nilai, diganti, s))
                         break
 
-                    pos3 = (s[:pos2] + s[pos2 + 1:]).find(entri_nonum, pos + 1)
+                    pos3 = (s[:pos2] + s[pos2 + 1:]).lower().find(entri_nonum.lower(), pos + 1)
                     if pos3 != pos + 1:
                         logging.warning('{} -> {}: makna or contoh still contain brackets that could not be extended: {}'.format(e_nilai, diganti, s))
                         # force replace!
