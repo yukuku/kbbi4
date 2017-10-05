@@ -682,6 +682,9 @@ def main():
             fo = None
             file_no += 1
 
+    fo.close()
+    fo = None
+
     for to_encrypt_fn in to_encrypt_fns:
         subprocess.call(['zopfli', to_encrypt_fn + '.txt'])
         # subprocess.call(['gzip', '-k', to_encrypt_fn + '.txt'])
