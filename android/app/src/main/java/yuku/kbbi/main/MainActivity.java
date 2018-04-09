@@ -403,29 +403,26 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 					return new DashboardPage();
 				}
 				case "definition": {
-					final Intent intent = Henson.with(MainActivity.this).gotoDefinitionPage()
-						.acu_id(Integer.parseInt(args[1]))
-						.build();
 					final DefinitionPage page = new DefinitionPage();
-					page.setArguments(intent.getExtras());
+					final Bundle bundle = new Bundle();
+					bundle.putInt("acu_id", Integer.parseInt(args[1]));
+					page.setArguments(bundle);
 					return page;
 				}
 				case "facet": {
-					final Intent intent = Henson.with(MainActivity.this).gotoFacetPage()
-						.facet(args[1])
-						.judul(args[2])
-						.build();
 					final FacetPage page = new FacetPage();
-					page.setArguments(intent.getExtras());
+					final Bundle bundle = new Bundle();
+					bundle.putString("facet", args[1]);
+					bundle.putString("judul", args[2]);
+					page.setArguments(bundle);
 					return page;
 				}
 				case "kategori": {
-					final Intent intent = Henson.with(MainActivity.this).gotoKategoriPage()
-						.facet(args[1])
-						.nilai(args[2])
-						.build();
 					final KategoriPage page = new KategoriPage();
-					page.setArguments(intent.getExtras());
+					final Bundle bundle = new Bundle();
+					bundle.putString("facet", args[1]);
+					bundle.putString("nilai", args[2]);
+					page.setArguments(bundle);
 					return page;
 				}
 			}

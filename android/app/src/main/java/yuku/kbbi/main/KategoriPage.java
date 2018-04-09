@@ -8,8 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import com.f2prateek.dart.Dart;
-import com.f2prateek.dart.InjectExtra;
 import yuku.kbbi.R;
 import yuku.kbbi.dictdata.Acu;
 import yuku.kbbi.dictdata.Kategori;
@@ -22,10 +20,7 @@ import static yuku.kbbi.main.MainActivity.requestDefinitionPage;
 import static yuku.kbbi.util.Views.Find;
 
 public class KategoriPage extends ContentPage {
-	@InjectExtra
 	String facet;
-
-	@InjectExtra
 	String nilai;
 
 	TextView tKategori;
@@ -37,7 +32,9 @@ public class KategoriPage extends ContentPage {
 	@Override
 	public void onCreate(@Nullable final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Dart.inject(this, getArguments());
+		final Bundle bundle = getArguments();
+		facet = bundle.getString("facet");
+		nilai = bundle.getString("nilai");
 	}
 
 	@Nullable

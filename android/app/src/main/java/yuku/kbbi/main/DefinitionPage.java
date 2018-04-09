@@ -7,8 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import com.f2prateek.dart.Dart;
-import com.f2prateek.dart.InjectExtra;
 import kotlin.Unit;
 import yuku.kbbi.R;
 import yuku.kbbi.dictdata.Acu;
@@ -17,7 +15,6 @@ import yuku.kbbi.dictdata.Renderer;
 import static yuku.kbbi.util.Views.Find;
 
 public class DefinitionPage extends ContentPage {
-	@InjectExtra
 	int acu_id;
 
 	TextView tDesc;
@@ -25,7 +22,8 @@ public class DefinitionPage extends ContentPage {
 	@Override
 	public void onCreate(@Nullable final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Dart.inject(this, getArguments());
+		final Bundle bundle = getArguments();
+		acu_id = bundle.getInt("acu_id");
 	}
 
 	@Nullable
