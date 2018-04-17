@@ -756,13 +756,22 @@ def main():
                 for a in acus:
                     write_varint(fo, a.aid)
 
+        # write list of kategori by facet
         with open('{}/kat_index_{}.txt'.format(base_out_dir, fname), 'wb') as fo:
             filtered = sorted(list(filter(lambda k: k.jenis == fname, all_kategoris)), key=lambda k: (k.urutan, k.desc.lower()))
+            filtered_nonempty = []
+
+            # check for kategori with no acu
+            for k in filtered:
+                if fmap.get(k.nilai) is None:
+                    logging.warning(u'Facet {}: {} has no acus'.format(fname, k.nilai))
+                else:
+                    filtered_nonempty.append(k)
 
             # length first
-            write_varint(fo, len(filtered))
+            write_varint(fo, len(filtered_nonempty))
 
-            for k in filtered:
+            for k in filtered_nonempty:
                 write_text(fo, k.nilai)
                 write_text(fo, k.desc)
 
