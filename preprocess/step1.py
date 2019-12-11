@@ -96,7 +96,7 @@ def canonize(s: str):
     return s
 
 
-conn = sqlite3.connect('in/kbbi5v4.db')
+conn = sqlite3.connect('in/kbbi5v5.db')
 
 # Bikin index supaya query di bawah pasti cepet
 conn.execute('create index if not exists Contoh_aktif on Contoh(aktif)')
