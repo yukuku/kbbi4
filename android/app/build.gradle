@@ -7,8 +7,8 @@ android {
         applicationId "yuku.kbbi5"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 21
-        versionName "0.2.1 Beta"
+        versionCode 22
+        versionName "0.2.2 Beta"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         resConfigs 'en'
 
