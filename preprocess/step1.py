@@ -3,8 +3,7 @@ import os
 import re
 import sqlite3
 import subprocess
-
-import sys
+from typing import List, Dict, Set
 
 
 class Entri:
@@ -14,7 +13,7 @@ class Entri:
         self.maknas = []
         self.jenis_rujuk = None
         self.entri_rujuk = None
-        self.acu_rujuks = []  # processed data by looking up entri and acu
+        self.acu_rujuks: List[Acu] = []  # processed data by looking up entri and acu
         self.induk = None
         self.anaks = []
         self.silabel = None
@@ -85,6 +84,7 @@ index_entri_nilai = {}
 all_acus = []
 all_entries = []
 all_kategoris = []
+nonbaku_backrujuks: Dict[int, Set[int]] = {}  # map<dest aid, set of src aids> only for nonbaku rujuks (where jenis_rujuk == '→')
 
 
 def canonize(s: str):
@@ -142,11 +142,13 @@ _inline_singkatan = [
     for k, v in INLINE_SINGKATAN.items()
 ]
 
+
 def expand_inline_singkatan(s):
     for _is in _inline_singkatan:
         if _is[0] in s:
             s = re.sub(_is[1], _is[2], s)
     return s
+
 
 for row in conn.execute('select eid, entri, jenis_rujuk, entri_rujuk, induk, silabel, jenis, entri_var, lafal from Entri where aktif=1').fetchall():
     e = Entri()
@@ -214,32 +216,42 @@ for i, acu in enumerate(all_acus):
 
 # make each Entri.entri_rujuk to point to the object
 for e in all_entries:
+    def connect_rujuk(entri_src: Entri, dst: Acu):
+        entri_src.acu_rujuks.append(dst)
+        if entri_src.jenis_rujuk == '→':
+            s: Set[int] = nonbaku_backrujuks.get(dst.aid)
+            if not s:
+                s: Set[int] = set()
+                nonbaku_backrujuks[dst.aid] = s
+            s.add(entri_src.acu.aid)
+
+
     er = e.entri_rujuk
     if er:
         er2 = index_entri_nilai.get(er)
         if er2:
-            e.acu_rujuks.append(er2.acu)
+            connect_rujuk(e, er2.acu)
         else:
             ar2 = index_acu_nilai.get(er)
             if ar2:
-                e.acu_rujuks.append(ar2)
+                connect_rujuk(e, ar2)
             else:
                 # coba huruf kecil dan buang angka dalam kurung
                 er = re.sub(r' \(\d+\)', '', er).lower().strip()
                 ar2 = index_acu_nilai.get(er)
                 if ar2:
-                    e.acu_rujuks.append(ar2)
+                    connect_rujuk(e, ar2)
                 else:
                     # coba split di ';'
                     for er in re.split(r'\s*;\s*', er):
                         er2 = index_entri_nilai.get(er)
                         if er2:
-                            e.acu_rujuks.append(er2.acu)
+                            connect_rujuk(e, er2.acu)
                         else:
                             er = re.sub(r' \(\d+\)', '', er).lower().strip()
                             ar2 = index_acu_nilai.get(er)
                             if ar2:
-                                e.acu_rujuks.append(ar2)
+                                connect_rujuk(e, ar2)
                             else:
                                 logging.warning("{} (jenis_rujuk {}): entri_rujuk or acu '{}' not found".format(e, e.jenis_rujuk, er))
 
@@ -484,6 +496,17 @@ def render_acu(acu):
 
         d.text('\n')
 
+        # render backrujuks for nonbaku
+        if nonbaku_backrujuks.get(entri.acu.aid):
+            srcaids: Set[int] = nonbaku_backrujuks[entri.acu.aid]
+            d.text('bentuk tidak baku: ')
+            fst_aid = True
+            for aid in sorted(srcaids):
+                if not fst_aid: d.text('; ')
+                d.esc_uint(CODE_LINK_ACU, aid)
+                fst_aid = False
+            d.text('\n')
+
         if entri.jenis_rujuk:
             if entri.jenis_rujuk == '→':
                 d.text('bentuk tidak baku dari ')
@@ -628,7 +651,7 @@ def render_acu(acu):
                             break
 
                         d.esc_text(CODE_KIMIA, s[start:pos])
-                        d.esc_text(CODE_KIMIA_SUB, s[pos+5:pos2])
+                        d.esc_text(CODE_KIMIA_SUB, s[pos + 5:pos2])
                         start = pos2 + 6
                     d.esc_text(CODE_KIMIA, s[start:])
 
@@ -756,13 +779,22 @@ def main():
                 for a in acus:
                     write_varint(fo, a.aid)
 
+        # write list of kategori by facet
         with open('{}/kat_index_{}.txt'.format(base_out_dir, fname), 'wb') as fo:
             filtered = sorted(list(filter(lambda k: k.jenis == fname, all_kategoris)), key=lambda k: (k.urutan, k.desc.lower()))
+            filtered_nonempty = []
+
+            # check for kategori with no acu
+            for k in filtered:
+                if fmap.get(k.nilai) is None:
+                    logging.warning(u'Facet {}: {} has no acus'.format(fname, k.nilai))
+                else:
+                    filtered_nonempty.append(k)
 
             # length first
-            write_varint(fo, len(filtered))
+            write_varint(fo, len(filtered_nonempty))
 
-            for k in filtered:
+            for k in filtered_nonempty:
                 write_text(fo, k.nilai)
                 write_text(fo, k.desc)
 
