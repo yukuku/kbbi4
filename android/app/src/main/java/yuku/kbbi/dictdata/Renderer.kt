@@ -4,7 +4,12 @@ import android.graphics.Typeface
 import android.support.v4.content.res.ResourcesCompat
 import android.text.SpannableStringBuilder
 import android.text.TextPaint
-import android.text.style.*
+import android.text.style.ClickableSpan
+import android.text.style.ForegroundColorSpan
+import android.text.style.RelativeSizeSpan
+import android.text.style.StyleSpan
+import android.text.style.SubscriptSpan
+import android.text.style.SuperscriptSpan
 import android.view.View
 import yuku.kbbi.App
 import yuku.kbbi.BuildConfig
@@ -12,7 +17,7 @@ import yuku.kbbi.R
 import yuku.kbbi.dastruk.Cav
 import yuku.kbbi.dastruk.ValueReader
 import yuku.salsa20.cipher.Salsa20InputStream
-import java.util.*
+import java.util.Locale
 import java.util.zip.GZIPInputStream
 
 class Renderer(val file_no: Int, val offset: Int, val acu_click: (Int) -> Unit, val kategori_click: (String, String) -> Unit) {
@@ -49,7 +54,7 @@ class Renderer(val file_no: Int, val offset: Int, val acu_click: (Int) -> Unit, 
 
         val f = fun() = run {
             var k = 1L
-            for (c in SpannableStringBuilder::class.java.canonicalName) {
+            for (c in SpannableStringBuilder::class.java.canonicalName.orEmpty()) {
                 k *= 47
                 k += c.toInt() xor 777
             }
