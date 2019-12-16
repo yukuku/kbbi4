@@ -1,76 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
 
-	<LinearLayout
+	<ScrollView
 		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:orientation="vertical">
-
-		<ImageView
-			android:layout_width="48dp"
-			android:layout_height="48dp"
-			android:layout_gravity="center_horizontal"
-			android:layout_marginTop="16dp"
-			android:src="@drawable/logotutwurihandayanicolor11" />
-
-		<TextView
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_marginTop="16dp"
-			android:text="KBBI V"
-			android:textAlignment="center"
-			android:textAppearance="@style/TextAppearance.AppCompat.Title"
-			android:textSize="28sp" />
-
-		<TextView
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_marginTop="8dp"
-			android:fontFamily="sans-serif-condensed"
-			android:paddingEnd="16dp"
-			android:paddingStart="16dp"
-			android:text="Kamus Besar Bahasa Indonesia Edisi Kelima"
-			android:textAlignment="center"
-			android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
-
-		<TextView
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_marginTop="16dp"
-			android:fontFamily="sans-serif-condensed"
-			android:paddingEnd="32dp"
-			android:paddingStart="32dp"
-			android:text="Aplikasi luring resmi Badan Pengembangan Bahasa dan Perbukuan, Kementerian Pendidikan dan Kebudayaan Republik Indonesia"
-			android:textAlignment="center"
-			android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
-
-		<ImageView
-			android:layout_width="match_parent"
-			android:layout_height="1dp"
-			android:layout_marginTop="16dp"
-			android:contentDescription="@null"
-			android:src="#ccc" />
-
-		<TextView
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_marginTop="32dp"
-			android:paddingEnd="32dp"
-			android:paddingStart="32dp"
-			android:text="@string/dashboard_help"
-			android:textAlignment="center" />
+		android:layout_height="match_parent">
 
 		<LinearLayout
-			android:id="@+id/panelFacets"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:layout_marginBottom="32dp"
-			android:layout_marginLeft="24dp"
-			android:layout_marginRight="24dp"
-			android:layout_marginTop="32dp"
-			android:orientation="vertical" />
+			android:orientation="vertical">
 
-	</LinearLayout>
-</ScrollView>
+			<ImageView
+				android:layout_width="48dp"
+				android:layout_height="48dp"
+				android:layout_gravity="center_horizontal"
+				android:layout_marginTop="16dp"
+				android:src="@drawable/logotutwurihandayanicolor11" />
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="16dp"
+				android:text="KBBI V"
+				android:textAlignment="center"
+				android:textAppearance="@style/TextAppearance.AppCompat.Title"
+				android:textSize="28sp" />
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="8dp"
+				android:fontFamily="sans-serif-condensed"
+				android:paddingStart="16dp"
+				android:paddingEnd="16dp"
+				android:text="Kamus Besar Bahasa Indonesia Edisi Kelima"
+				android:textAlignment="center"
+				android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="16dp"
+				android:fontFamily="sans-serif-condensed"
+				android:paddingStart="32dp"
+				android:paddingEnd="32dp"
+				android:text="Aplikasi luring resmi Badan Pengembangan Bahasa dan Perbukuan, Kementerian Pendidikan dan Kebudayaan Republik Indonesia"
+				android:textAlignment="center"
+				android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
+
+			<ImageView
+				android:layout_width="match_parent"
+				android:layout_height="1dp"
+				android:layout_marginTop="16dp"
+				android:contentDescription="@null"
+				android:src="#ccc" />
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="32dp"
+				android:breakStrategy="balanced"
+				android:paddingStart="32dp"
+				android:paddingEnd="32dp"
+				android:text="@string/dashboard_help"
+				android:textAlignment="center"
+				tools:targetApi="m" />
+
+			<LinearLayout
+				android:id="@+id/panelFacets"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="24dp"
+				android:layout_marginTop="32dp"
+				android:layout_marginRight="24dp"
+				android:layout_marginBottom="32dp"
+				android:orientation="vertical" />
+
+			<!-- For FAB -->
+			<Space
+				android:layout_width="0dp"
+				android:layout_height="72dp" />
+
+		</LinearLayout>
+	</ScrollView>
+
+	<android.support.design.widget.FloatingActionButton
+		android:id="@+id/bSearch"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="bottom|end"
+		android:layout_marginEnd="16dp"
+		android:layout_marginBottom="16dp"
+		android:src="@drawable/ic_search_white_24dp" />
+
+</android.support.design.widget.CoordinatorLayout>

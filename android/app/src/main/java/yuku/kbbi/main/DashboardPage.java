@@ -1,13 +1,14 @@
 package yuku.kbbi.main;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import yuku.kbbi.R;
-
 import static yuku.kbbi.util.Views.Find;
 
 public class DashboardPage extends ContentPage {
@@ -19,12 +20,14 @@ public class DashboardPage extends ContentPage {
 	};
 
 	ViewGroup panelFacets;
+	FloatingActionButton bSearch;
 
 	@Nullable
 	@Override
 	public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable final Bundle savedInstanceState) {
 		final View res = inflater.inflate(R.layout.page_main_dashboard, container, false);
 		panelFacets = Find(res, R.id.panelFacets);
+		bSearch = Find(res, R.id.bSearch);
 		return res;
 	}
 
@@ -55,5 +58,15 @@ public class DashboardPage extends ContentPage {
 
 			cell.setOnClickListener(v -> MainActivity.requestFacetPage(name, title));
 		}
+
+		bSearch.setOnClickListener(v -> {
+			final Activity activity = getActivity();
+			if (activity != null) {
+				final View menuSearch = activity.findViewById(R.id.menuSearch);
+				if (menuSearch != null) {
+					menuSearch.performClick();
+				}
+			}
+		});
 	}
 }

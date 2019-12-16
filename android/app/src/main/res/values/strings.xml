@@ -7,5 +7,5 @@
 	<string name="menu_about">Tentang Kami</string>
 	<string name="menu_search">Cari</string>
 
-	<string name="dashboard_help">Silakan tekan <b>ikon cari</b> di kanan atas dan tikkan kata yang ingin Anda temukan, atau gunakan tautan-tautan di bawah ini untuk menelusuri isi Kamus Besar Bahasa Indonesia.</string>
+	<string name="dashboard_help">Silakan tekan <b>ikon cari</b> dan tikkan kata yang ingin Anda temukan, atau gunakan tautan-tautan di bawah ini untuk menelusuri isi Kamus Besar Bahasa Indonesia.</string>
 </resources>
