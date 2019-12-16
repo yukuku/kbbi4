@@ -42,7 +42,7 @@
 			android:fontFamily="sans-serif-condensed"
 			android:paddingEnd="32dp"
 			android:paddingStart="32dp"
-			android:text="Aplikasi luring resmi Badan Pengembangan dan Pembinaan Bahasa, Kementerian Pendidikan dan Kebudayaan Republik Indonesia"
+			android:text="Aplikasi luring resmi Badan Pengembangan Bahasa dan Perbukuan, Kementerian Pendidikan dan Kebudayaan Republik Indonesia"
 			android:textAlignment="center"
 			android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
 
