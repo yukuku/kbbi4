@@ -1,17 +1,16 @@
 package yuku.kbbi.main;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import androidx.annotation.Nullable;
 import kotlin.Unit;
 import yuku.kbbi.R;
 import yuku.kbbi.dictdata.Acu;
 import yuku.kbbi.dictdata.Renderer;
-
 import static yuku.kbbi.util.Views.Find;
 
 public class DefinitionPage extends ContentPage {

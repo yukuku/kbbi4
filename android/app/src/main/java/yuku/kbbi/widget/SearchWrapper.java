@@ -1,17 +1,16 @@
 package yuku.kbbi.widget;
 
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import androidx.annotation.NonNull;
 import yuku.kbbi.BaseActivity;
 import yuku.kbbi.R;
-
-import static android.view.View.GONE;
-import static android.view.View.VISIBLE;
 import static yuku.kbbi.util.Views.Find;
 import static yuku.kbbi.util.Views.gonify;
 

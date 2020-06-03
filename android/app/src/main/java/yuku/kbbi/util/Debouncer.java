@@ -3,7 +3,6 @@ package yuku.kbbi.util;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-
 import java.lang.ref.WeakReference;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -13,6 +12,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Delays processing of a payload, and if another payload is submitted
  * afterwards, the earlier ones are not processed nor delivered any more.
+ *
  * @param <RequestType>
  * @param <ResultType>
  */
@@ -57,6 +57,7 @@ public abstract class Debouncer<RequestType, ResultType> {
 
 	/**
 	 * Call this on the menu_main thread.
+	 *
 	 * @param defaultDelay The default delay in ms before {@link #process(RequestType)} is performed.
 	 */
 	public Debouncer(final long defaultDelay) {
@@ -66,6 +67,7 @@ public abstract class Debouncer<RequestType, ResultType> {
 
 	/**
 	 * Schedule processing after the default delay.
+	 *
 	 * @param payload Payload to be sent to the {@link #process(RequestType)} method.
 	 */
 	public void submit(final RequestType payload) {
@@ -74,6 +76,7 @@ public abstract class Debouncer<RequestType, ResultType> {
 
 	/**
 	 * Schedule processing after the specified delay.
+	 *
 	 * @param payload Payload to be sent to the {@link #process(RequestType)} method.
 	 */
 	public void submit(final RequestType payload, final long delay) {

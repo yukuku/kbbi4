@@ -1,7 +1,6 @@
 package yuku.kbbi.dictdata
 
 import android.graphics.Typeface
-import android.support.v4.content.res.ResourcesCompat
 import android.text.SpannableStringBuilder
 import android.text.TextPaint
 import android.text.style.ClickableSpan
@@ -11,6 +10,7 @@ import android.text.style.StyleSpan
 import android.text.style.SubscriptSpan
 import android.text.style.SuperscriptSpan
 import android.view.View
+import androidx.core.content.res.ResourcesCompat
 import yuku.kbbi.App
 import yuku.kbbi.BuildConfig
 import yuku.kbbi.R

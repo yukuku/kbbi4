@@ -5,7 +5,7 @@ import android.util.TimingLogger
 import yuku.kbbi.App
 import yuku.kbbi.dastruk.ValueReader
 import java.io.BufferedInputStream
-import java.util.*
+import java.util.Arrays
 
 object Acu {
     const val TAG = "Acu"

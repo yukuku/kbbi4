@@ -1,13 +1,12 @@
 package yuku.kbbi.util;
 
 import android.app.Activity;
-import android.support.annotation.IdRes;
-import android.support.annotation.NonNull;
 import android.view.View;
-
 import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
+import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
 
 public class Views {
 	/**
