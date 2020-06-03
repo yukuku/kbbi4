@@ -1,29 +1,12 @@
 package yuku.kbbi.util;
 
-import android.app.Activity;
 import android.view.View;
 import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
-import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 
 public class Views {
-	/**
-	 * Automatic-casting version of {@link View#findViewById(int)}.
-	 */
-	@SuppressWarnings("unchecked")
-	public static <T extends View> T Find(@NonNull View parent, @IdRes int id) {
-		return (T) parent.findViewById(id);
-	}
-
-	/**
-	 * Automatic-casting version of {@link Activity#findViewById(int)}.
-	 */
-	@SuppressWarnings("unchecked")
-	public static <T extends View> T Find(@NonNull Activity activity, @IdRes int id) {
-		return (T) activity.findViewById(id);
-	}
 
 	public static void gonify(View... views) {
 		changeVisibility(GONE, views);

@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,7 +14,6 @@ import java.util.List;
 import yuku.kbbi.R;
 import yuku.kbbi.dictdata.Kategori;
 import yuku.kbbi.dictdata.KategoriRepo;
-import static yuku.kbbi.util.Views.Find;
 
 public class FacetPage extends ContentPage {
 	String facet;
@@ -36,8 +36,8 @@ public class FacetPage extends ContentPage {
 	@Override
 	public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable final Bundle savedInstanceState) {
 		final View res = inflater.inflate(R.layout.page_main_facet, container, false);
-		tFacet = Find(res, R.id.tFacet);
-		lsKategoris = Find(res, R.id.lsKategoris);
+		tFacet = res.findViewById(R.id.tFacet);
+		lsKategoris = res.findViewById(R.id.lsKategoris);
 		return res;
 	}
 
@@ -54,22 +54,23 @@ public class FacetPage extends ContentPage {
 	static class ViewHolder extends RecyclerView.ViewHolder {
 		final TextView text1;
 
-		public ViewHolder(final View itemView) {
+		ViewHolder(final View itemView) {
 			super(itemView);
-			text1 = Find(itemView, android.R.id.text1);
+			text1 = itemView.findViewById(android.R.id.text1);
 		}
 	}
 
 	class KategorisAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 		final List<Kategori> kategoris = new ArrayList<>();
 
+		@NonNull
 		@Override
-		public RecyclerView.ViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
+		public RecyclerView.ViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, final int viewType) {
 			return new ViewHolder(getActivity().getLayoutInflater().inflate(R.layout.item_acu, parent, false));
 		}
 
 		@Override
-		public void onBindViewHolder(final RecyclerView.ViewHolder _holder_, final int position) {
+		public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder _holder_, final int position) {
 			final ViewHolder holder = (ViewHolder) _holder_;
 			{
 				final Kategori kategori = kategoris.get(position);

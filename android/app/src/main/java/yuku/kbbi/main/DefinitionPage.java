@@ -6,12 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import kotlin.Unit;
 import yuku.kbbi.R;
 import yuku.kbbi.dictdata.Acu;
 import yuku.kbbi.dictdata.Renderer;
-import static yuku.kbbi.util.Views.Find;
 
 public class DefinitionPage extends ContentPage {
 	int acu_id;
@@ -29,12 +29,12 @@ public class DefinitionPage extends ContentPage {
 	@Override
 	public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable final Bundle savedInstanceState) {
 		final View res = inflater.inflate(R.layout.page_main_definition, container, false);
-		tDesc = Find(res, R.id.tDesc);
+		tDesc = res.findViewById(R.id.tDesc);
 		return res;
 	}
 
 	@Override
-	public void onViewCreated(final View view, @Nullable final Bundle savedInstanceState) {
+	public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 
 		final Renderer renderer = Acu.INSTANCE.getRenderer(acu_id, link_acu_id -> {

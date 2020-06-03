@@ -44,7 +44,6 @@ import yuku.kbbi.dictdata.Acu;
 import yuku.kbbi.util.Background;
 import yuku.kbbi.util.Debouncer;
 import yuku.kbbi.util.Exceptions;
-import static yuku.kbbi.util.Views.Find;
 import static yuku.kbbi.util.Views.gonify;
 import static yuku.kbbi.util.Views.isVisible;
 import static yuku.kbbi.util.Views.visiblify;
@@ -69,7 +68,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		final Toolbar toolbar = find(R.id.toolbar);
+		final Toolbar toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 		toolbar.setNavigationIcon(R.drawable.ic_menu_gold_24dp);
 		ab = getSupportActionBar();
@@ -77,16 +76,16 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 		ab.setHomeButtonEnabled(true);
 		ab.setDisplayShowTitleEnabled(true);
 
-		drawer = find(R.id.drawer_layout);
+		drawer = findViewById(R.id.drawer_layout);
 
-		final NavigationView nav = find(R.id.nav);
+		final NavigationView nav = findViewById(R.id.nav);
 		nav.setNavigationItemSelectedListener(this);
 
-		lsAcus = find(R.id.lsAcus);
+		lsAcus = findViewById(R.id.lsAcus);
 		lsAcus.setLayoutManager(new LinearLayoutManager(this));
 		lsAcus.setAdapter(acusAdapter = new AcusAdapter());
 
-		searchWrapper = new SearchWrapper(find(R.id.searchView));
+		searchWrapper = new SearchWrapper(findViewById(R.id.searchView));
 		searchWrapper.setOnQueryTextListener(new SearchWrapper.OnQueryTextListener() {
 			@NonNull
 			private String proc(final @NonNull String query) {
@@ -107,10 +106,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 		descriptors = new ArrayList<>();
 		descriptors.add(new SimplePageDescriptor("dashboard", "Dashboard"));
 
-		vp = find(R.id.vp);
+		vp = findViewById(R.id.vp);
 		vp.setAdapter(pagerAdapter = new ContentAdapter(getSupportFragmentManager(), descriptors));
 
-		Background.run(() -> Acu.INSTANCE.warmup());
+		Background.run(Acu.INSTANCE::warmup);
 
 		App.lbm().registerReceiver(requestNewPageReceiver, new IntentFilter(ACTION_REQUEST_NEW_PAGE));
 	}
@@ -284,7 +283,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
 		public ViewHolder(final View itemView) {
 			super(itemView);
-			text1 = Find(itemView, android.R.id.text1);
+			text1 = itemView.findViewById(android.R.id.text1);
 		}
 	}
 
@@ -295,13 +294,14 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 			setHasStableIds(true);
 		}
 
+		@NonNull
 		@Override
-		public RecyclerView.ViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
+		public RecyclerView.ViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, final int viewType) {
 			return new ViewHolder(getLayoutInflater().inflate(R.layout.item_acu, parent, false));
 		}
 
 		@Override
-		public void onBindViewHolder(final RecyclerView.ViewHolder _holder_, final int position) {
+		public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder _holder_, final int position) {
 			final ViewHolder holder = (ViewHolder) _holder_;
 			{
 				final String acu = acus.get(position);
@@ -365,7 +365,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 					.setMessage(content)
 					.setPositiveButton("OK", null)
 					.setNeutralButton("Tim Penyusun", (dialog1, which) -> Background.run(() -> {
-						//noinspection deprecation
 						final Spanned text = Html.fromHtml(Exceptions.mustNotFail(() -> TextStreamsKt.readText(new InputStreamReader(getAssets().open("about/penyusun.html"), Charset.forName("utf-8")))));
 						runOnUiThread(() -> new AlertDialog.Builder(this)
 							.setMessage(text)
@@ -375,7 +374,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 					}))
 					.show();
 
-				final TextView tv = (TextView) dialog.findViewById(android.R.id.message);
+				final TextView tv = dialog.findViewById(android.R.id.message);
 				if (tv != null) {
 					tv.setMovementMethod(LinkMovementMethod.getInstance());
 				}
@@ -387,7 +386,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 		return true;
 	}
 
-	class ContentAdapter extends ArrayPagerAdapter<ContentPage> {
+	static class ContentAdapter extends ArrayPagerAdapter<ContentPage> {
 		public ContentAdapter(final FragmentManager fragmentManager, final List<PageDescriptor> descriptors) {
 			super(fragmentManager, descriptors);
 		}

@@ -9,7 +9,6 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import yuku.kbbi.R;
-import static yuku.kbbi.util.Views.Find;
 
 public class DashboardPage extends ContentPage {
 	static String[] facets = {
@@ -26,8 +25,8 @@ public class DashboardPage extends ContentPage {
 	@Override
 	public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable final Bundle savedInstanceState) {
 		final View res = inflater.inflate(R.layout.page_main_dashboard, container, false);
-		panelFacets = Find(res, R.id.panelFacets);
-		bSearch = Find(res, R.id.bSearch);
+		panelFacets = res.findViewById(R.id.panelFacets);
+		bSearch = res.findViewById(R.id.bSearch);
 		return res;
 	}
 
@@ -49,10 +48,11 @@ public class DashboardPage extends ContentPage {
 			}
 
 			assert row != null;
-			final View cell = Find(row, idx % 2 == 0 ? R.id.cell0 : R.id.cell1);
+			int id = idx % 2 == 0 ? R.id.cell0 : R.id.cell1;
+			final View cell = row.findViewById(id);
 
-			final TextView tFacetTitle = Find(cell, R.id.tFacetTitle);
-			final TextView tFacetDesc = Find(cell, R.id.tFacetDesc);
+			final TextView tFacetTitle = cell.findViewById(R.id.tFacetTitle);
+			final TextView tFacetDesc = cell.findViewById(R.id.tFacetDesc);
 			tFacetTitle.setText(title);
 			tFacetDesc.setText(desc);
 

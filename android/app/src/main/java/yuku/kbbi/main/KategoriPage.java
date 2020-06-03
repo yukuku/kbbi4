@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,7 +16,6 @@ import yuku.kbbi.dictdata.Acu;
 import yuku.kbbi.dictdata.Kategori;
 import yuku.kbbi.dictdata.KategoriRepo;
 import static yuku.kbbi.main.MainActivity.requestDefinitionPage;
-import static yuku.kbbi.util.Views.Find;
 
 public class KategoriPage extends ContentPage {
 	String facet;
@@ -39,13 +39,13 @@ public class KategoriPage extends ContentPage {
 	@Override
 	public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable final Bundle savedInstanceState) {
 		final View res = inflater.inflate(R.layout.page_main_kategori, container, false);
-		tKategori = Find(res, R.id.tKategori);
-		lsAcus = Find(res, R.id.lsAcus);
+		tKategori = res.findViewById(R.id.tKategori);
+		lsAcus = res.findViewById(R.id.lsAcus);
 		return res;
 	}
 
 	@Override
-	public void onViewCreated(final View view, @Nullable final Bundle savedInstanceState) {
+	public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 
 		kategori = KategoriRepo.INSTANCE.getKategori(facet, nilai);
@@ -66,7 +66,7 @@ public class KategoriPage extends ContentPage {
 
 		public ViewHolder(final View itemView) {
 			super(itemView);
-			text1 = Find(itemView, android.R.id.text1);
+			text1 = itemView.findViewById(android.R.id.text1);
 		}
 	}
 
@@ -77,13 +77,14 @@ public class KategoriPage extends ContentPage {
 			setHasStableIds(true);
 		}
 
+		@NonNull
 		@Override
-		public RecyclerView.ViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
+		public RecyclerView.ViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, final int viewType) {
 			return new ViewHolder(getActivity().getLayoutInflater().inflate(R.layout.item_acu, parent, false));
 		}
 
 		@Override
-		public void onBindViewHolder(final RecyclerView.ViewHolder _holder_, final int position) {
+		public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder _holder_, final int position) {
 			final ViewHolder holder = (ViewHolder) _holder_;
 			{
 				final String acu = acus.get(position);

@@ -11,7 +11,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import yuku.kbbi.BaseActivity;
 import yuku.kbbi.R;
-import static yuku.kbbi.util.Views.Find;
 import static yuku.kbbi.util.Views.gonify;
 
 public class SearchWrapper {
@@ -27,13 +26,13 @@ public class SearchWrapper {
 	public final TextView tSearchText;
 	public final ImageButton bSearchClear;
 
-	private OnQueryTextListener mOnQueryChangeListener;
-	private CharSequence mOldQueryText;
+	OnQueryTextListener mOnQueryChangeListener;
+	CharSequence mOldQueryText;
 
 	public SearchWrapper(final View view) {
 		root = view;
-		tSearchText = Find(view, R.id.tSearchText);
-		bSearchClear = Find(view, R.id.bSearchClear);
+		tSearchText = view.findViewById(R.id.tSearchText);
+		bSearchClear = view.findViewById(R.id.bSearchClear);
 
 		gonify(bSearchClear);
 
