@@ -258,9 +258,13 @@ for e in all_entries:
 # make each Entri.induk to point to the object
 for e in all_entries:
     if e.induk:
-        induk = index_entri_eid[e.induk]
-        e.induk = induk
-        induk.anaks.append(e)
+        induk = index_entri_eid.get(e.induk)
+        if induk is None:
+            logging.warning("{} has induk {} that can't be found".format(e, e.induk))
+            e.induk = None
+        else:
+            e.induk = induk
+            induk.anaks.append(e)
 
 for e in all_entries:
     if not e.maknas and not e.induk and not e.anaks and not e.jenis_rujuk and not e.entri_rujuk:
