@@ -355,9 +355,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 				break;
 			case R.id.menuAbout:
 				final SpannableStringBuilder content = new SpannableStringBuilder(getString(R.string.app_name) + " " + BuildConfig.VERSION_NAME + " (" + BuildConfig.VERSION_CODE + ")\n\n" +
-					"© 2016-2019 Badan Pengembangan Bahasa dan Perbukuan, Kementerian Pendidikan dan Kebudayaan Republik Indonesia\n\n" +
+					"© 2016-2020 Badan Pengembangan Bahasa dan Perbukuan, Kementerian Pendidikan dan Kebudayaan Republik Indonesia\n\n" +
 					"Untuk informasi lebih lanjut, silakan mengunjungi KBBI V Daring kbbi.kemdikbud.go.id atau menghubungi kami melalui posel badan.bahasa@kemdikbud.go.id\n\n" +
-					"Pengembang aplikasi:\n– David Moeljadi\n– Randy Sugianto (Yuku)\n– Jaya Satrio Hendrick\n– Kenny Hartono");
+					"Pengembang aplikasi:\n– David Moeljadi\n– Randy Sugianto (Yuku)\n– Jaya Satrio Hendrick\n– Kenny Hartono\n\n" +
+					"Kode sumber aplikasi: https://github.com/yukuku/kbbi4");
 
 				LinkifyCompat.addLinks(content, Linkify.WEB_URLS | Linkify.EMAIL_ADDRESSES);
 
