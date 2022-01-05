@@ -8,10 +8,6 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
     }
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
-    }
     buildTypes {
         release {
             minifyEnabled false
@@ -26,5 +22,4 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
 }
