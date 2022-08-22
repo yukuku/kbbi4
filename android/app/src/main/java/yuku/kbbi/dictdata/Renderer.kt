@@ -1,3 +1,5 @@
+@file:Suppress("PropertyName", "LocalVariableName")
+
 package yuku.kbbi.dictdata
 
 import android.graphics.Typeface
@@ -56,7 +58,7 @@ class Renderer(val file_no: Int, val offset: Int, val acu_click: (Int) -> Unit, 
             var k = 1L
             for (c in SpannableStringBuilder::class.java.canonicalName.orEmpty()) {
                 k *= 47
-                k += c.toInt() xor 777
+                k += c.code xor 777
             }
             String.format(Locale.US, "%016x", k)
         }
@@ -66,11 +68,15 @@ class Renderer(val file_no: Int, val offset: Int, val acu_click: (Int) -> Unit, 
     val src by lazy { K.d(BuildConfig.ENC_KEY_IV) }
 
     private fun getDesc(fn: String): ValueReader {
-        return ValueReader(GZIPInputStream(Salsa20InputStream(
-            App.context.assets.open(fn),
-            bin,
-            src
-        )))
+        return ValueReader(
+            GZIPInputStream(
+                Salsa20InputStream(
+                    App.context.assets.open(fn),
+                    bin,
+                    src
+                )
+            )
+        )
     }
 
     fun render(): SpannableStringBuilder {
