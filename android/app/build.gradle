@@ -1,3 +1,9 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
+}
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
@@ -11,16 +17,6 @@ android {
         versionName "0.4.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         resConfigs 'en'
-
-        def ENC_KEY_1 = System.getenv("ENC_KEY_1")
-        def ENC_KEY_IV = System.getenv("ENC_KEY_IV")
-
-        if (ENC_KEY_1 == null || ENC_KEY_IV == null) {
-            throw new RuntimeException("ENC_KEY_1 or ENC_KEY_IV not defined")
-        }
-
-        buildConfigField "String", "ENC_KEY_1", "\"$ENC_KEY_1\""
-        buildConfigField "String", "ENC_KEY_IV", "\"$ENC_KEY_IV\""
     }
     buildTypes {
         release {

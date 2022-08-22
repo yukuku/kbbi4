@@ -3,3 +3,4 @@ android/app/src/main/assets/dictdata
 android/.idea/caches
 preprocess/in/kbbi5v*.db
 android/app/app-release-*.apk
+android/.idea/jarRepositories.xml
