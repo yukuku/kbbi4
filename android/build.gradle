@@ -5,7 +5,6 @@ buildscript {
 
     repositories {
         mavenCentral()
-        jcenter()
         google()
     }
 
@@ -31,6 +30,6 @@ task clean(type: Delete) {
 
 ext {
     minSdkVersion = 17
-    compileSdkVersion = 30
-    targetSdkVersion = 30
+    compileSdkVersion = 31
+    targetSdkVersion = 31
 }
