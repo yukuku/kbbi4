@@ -17,6 +17,8 @@ android {
         versionName "0.4.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         resConfigs 'en'
+
+        buildConfigField "String", "BUILD_YEAR", "String.valueOf(new java.util.Date().getYear() + 1900)"
     }
     buildTypes {
         release {
