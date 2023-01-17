@@ -3,6 +3,7 @@ package yuku.kbbi.util;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import androidx.annotation.NonNull;
 import java.lang.ref.WeakReference;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -21,7 +22,7 @@ public abstract class Debouncer<RequestType, ResultType> {
 
 	public static final int MSG_ON_RESULT = 1;
 
-	private final DebounceHandler handler;
+	final DebounceHandler<RequestType, ResultType> handler;
 	private final long defaultDelay;
 	final ScheduledExecutorService sched = Executors.newSingleThreadScheduledExecutor();
 
@@ -35,7 +36,7 @@ public abstract class Debouncer<RequestType, ResultType> {
 		}
 
 		@Override
-		public void handleMessage(final Message msg) {
+		public void handleMessage(@NonNull final Message msg) {
 			final Debouncer<RequestType, ResultType> debouncer = this.ref.get();
 			if (debouncer == null) return;
 
