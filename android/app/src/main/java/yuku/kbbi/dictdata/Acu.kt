@@ -76,10 +76,10 @@ object Acu {
     }
 
     fun listAcus(prefix: String): List<String> {
-        var from = Arrays.binarySearch(acus, "$prefix\u0000").inv() - 1
+        var from = Arrays.binarySearch(acus, prefix)
         var to = Arrays.binarySearch(acus, "$prefix\uffff").inv()
 
-        if (from < 0) from = 0
+        if (from < 0) from = from.inv()
         if (to > acus.size) to = acus.size
 
         return acus.slice(from..to - 1)
