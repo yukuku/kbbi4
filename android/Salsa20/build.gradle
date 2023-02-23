@@ -20,6 +20,7 @@ android {
         }
     }
     ndkVersion '25.0.8775105'
+    namespace 'yuku.salsa20'
 }
 
 dependencies {
